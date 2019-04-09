@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "server": "nodemon npx babel-node ./src/server/app.js",
+    "server": "nodemon --exec npx babel-node ./src/server/app.js",
     "ui": "webpack-dev-server --mode development --open --hot",
     "ui_build": "webpack --mode production",
     "ui_build_dev": "webpack --mode production --watch",

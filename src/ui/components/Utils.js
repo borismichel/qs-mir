@@ -91,7 +91,7 @@ export class MyReactForm extends Component {
                         onChange={this.handleChange} 
                     />
                     <br />
-                    <input type='button' onClick={this.handleSend}></input>
+                    <input type='button' onClick={this.handleSend} value='Send' />
                 </form>
                 <div>
                     <p>
@@ -99,6 +99,84 @@ export class MyReactForm extends Component {
                     </p>
                 </div>
             </div>
+        )
+    }
+
+}
+
+export class ItemTable extends Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            measures: [],
+            dimensions: []
+        }
+    }
+
+    componentDidMount() {
+        let uri = window.location.protocol;
+        uri += '//' + window.location.hostname;
+        uri += (window.location.port.length > 0) ? (':' + window.location.port):'';
+        uri += '/api/qsmasterpull';
+
+        console.log('Mounting');
+        console.log(uri);
+
+        fetch(uri)
+        .then((response) => {
+            return response.json();
+        })
+        .then(resultArray => {
+            let msrArray = resultArray[0].map((msrObj) => {
+                return (
+                    <tr>
+                         <td>{msrObj.qMeta.title}</td>
+                         <td>{msrObj.qMeta.description}</td>
+                    </tr>
+                )
+            })
+            let dimArray = resultArray[1].map((dimObj) => {
+                return (
+                    <tr>
+                         <td>{dimObj.qMeta.title}</td>
+                         <td>{dimObj.qMeta.description}</td>
+                    </tr>
+                )
+            })
+            console.log(dimArray);
+            this.setState({
+                measures: msrArray,
+                dimensions: dimArray
+            })
+            console.log('State: ', this.state)
+        })
+    }
+    
+    render(){
+        return (
+            <div>
+                <h2>Measures</h2>
+                <table>
+                    <tbody>
+                        <tr>
+                            <th>Name</th>
+                            <th>Description</th>
+                        </tr>
+                        {this.state.measures}
+                    </tbody>
+                </table>
+                <h2>Dimensions</h2>
+                <table>
+                    <tbody>
+                        <tr>
+                            <th>Name</th>
+                            <th>Description</th>
+                        </tr>
+                        {this.state.dimensions}
+                    </tbody>
+                </table>
+            </div>  
         )
     }
 
