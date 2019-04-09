@@ -15,8 +15,10 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname,'../../dist/index.html'));
 });
 
-app.get('/api/qsmasterpull', (req,res) => {
-    qs.qsPullMasterItems().then((r) => {
+app.post('/api/qsmasterpull', (req,res) => {
+    let appid = req.body.app;
+    console.log(JSON.stringify(req.body));
+    qs.qsPullMasterItems(appid).then((r) => {
         console.log(r);
         res.send(r)
         res.end();

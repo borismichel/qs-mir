@@ -14,7 +14,7 @@ const webSocket = require('ws');
 // session.on('traffic:sent', data => console.log('sent:', data));
 // session.on('traffic:received', data => console.log('received:', data));
 
-export function qsPullMasterItems (app) {
+export function qsPullMasterItems (appid) {
 
     const session = enigma.create({
         schema,
@@ -32,7 +32,7 @@ export function qsPullMasterItems (app) {
     return new Promise((resolve, reject) => {
         session.open()
         .then((global) => {
-            return global.openDoc(config.qlikApp)
+            return global.openDoc(appid)
         }).then((app) => {
 
             //Get Measures
