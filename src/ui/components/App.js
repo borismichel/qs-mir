@@ -19,6 +19,7 @@ class App extends Component {
                 <h1>My React App!</h1>
                 <Utils.MyTable rows={myTable} />
                 <Utils.MyReactForm />
+                <Utils.ItemTable />
             </div>
         );
     }
