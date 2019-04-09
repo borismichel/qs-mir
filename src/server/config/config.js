@@ -11,4 +11,4 @@ export var proxy = 'http://proxy:80';
 export var qlikCertificateDir = './src/cert/';
 export var qlikUser     = 'UserDirectory= INTERNAL;UserId= SA_API';
 export var qlikServer   = 'ws://localhost:9076/app/engineData';
-export var qlikApp      = 'C:\\Users\\bmichel\\Documents\\Qlik\\Sense\\Apps\\Consumer Sales.qvf';
+export var qlikApp      = 'C:\\Users\\bmichel\\Documents\\Qlik\\Sense\\Apps\\Consumer Goods Sales 3.0.qvf';

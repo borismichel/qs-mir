@@ -1,9 +1,8 @@
-import * as myCubes from './qs_cubes';
-import * as config from '../config/config';
-import * as enigma from 'enigma.js';
-import * as schema from 'enigma.js/schemas/12.34.11.json';
-import * as webSocket from 'ws';
-import * as fs from 'fs';
+const myCubes = require('./qs_cubes');
+const config = require('../config/config');
+const enigma  = require('enigma.js');
+const schema  = require('enigma.js/schemas/12.34.11.json');
+const webSocket = require('ws');
 
 //get Server Certificates
 
@@ -67,11 +66,9 @@ export function qsPullMasterItems (app) {
             return Promise.all([p1, p2, p3])
         
         }).then((r) => {
-            
-                
-                
+            console.log((r[0]));
+            return [r[0], r[1]];                              
         }).then((results) => {
-            console.log('results: ' + JSON.stringify(results));
             session.close();
             resolve(results);
         })

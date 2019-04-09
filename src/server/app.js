@@ -2,9 +2,11 @@ const express = require('express');
 const bodyparser = require('body-parser');
 const path = require('path');
 
-const app = express();
+// Custom Packages
 
-console.log(path.join(__dirname, '../../dist'))
+const qs = require('./qs/qs');
+
+const app = express();
 
 app.use(bodyparser.json());
 app.use(express.static(path.join(__dirname, '../../dist/')));
@@ -12,6 +14,14 @@ app.use(express.static(path.join(__dirname, '../../dist/')));
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname,'../../dist/index.html'));
 });
+
+app.get('/api/qsmasterpull', (req,res) => {
+    qs.qsPullMasterItems().then((r) => {
+        console.log(r);
+        res.send(r)
+        res.end();
+    })
+})
 
 app.post('/submit', (req, res) => {
     res.setHeader('Content-Type', 'text/plain');
@@ -21,3 +31,4 @@ app.post('/submit', (req, res) => {
 })
 
 app.listen(1212);
+console.log('Server listening on port 1212')
