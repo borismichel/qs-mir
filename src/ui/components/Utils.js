@@ -123,7 +123,14 @@ export class ItemTable extends Component {
         console.log('Mounting');
         console.log(uri);
 
-        fetch(uri)
+        fetch(uri, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+              },
+            body: JSON.stringify({"app": "C:\\Users\\bmichel\\Documents\\Qlik\\Sense\\Apps\\Consumer Goods Sales 3.0.qvf"})
+        })
         .then((response) => {
             return response.json();
         })
