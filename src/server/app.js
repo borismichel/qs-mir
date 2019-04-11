@@ -17,10 +17,28 @@ app.get('/', (req, res) => {
 
 app.post('/api/qsmasterpull', (req,res) => {
     let appid = req.body.app;
-    console.log(JSON.stringify(req.body));
-    qs.qsPullMasterItems(appid).then((r) => {
-        console.log(r);
+    console.log('API', 'Sending Master Items')
+    qs.qsPullAndMapMasterItems(appid).then((r) => {
+        console.log('API', 'Sending Master Items', 'm', r[0].length, 'd', r[1].length)
         res.send(r)
+        res.end();
+    })
+})
+
+app.get('/test', (req,res) => {
+    let appid = "C:\\Users\\Boris Michel\\Documents\\Qlik\\Sense\\Apps\\Consumer Sales.qvf" //req.body.app;
+    console.log('API', 'Sending Master Items')
+    qs.qsPullAndMapMasterItems(appid).then((r) => {
+        console.log('API', 'Sending Master Items', 'm', r[0].length, 'd', r[1].length)
+        res.send(JSON.stringify(r, null, 2));
+        res.end();
+    })
+})
+
+app.get('/api/qsgetdoclist', (req, res) => {
+    qs.qsGetDocList().then((list) => {
+        console.log('API', 'Sending Doc List')
+        res.send(list);
         res.end();
     })
 })
