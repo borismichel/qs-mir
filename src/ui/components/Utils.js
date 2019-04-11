@@ -107,21 +107,43 @@ export class MyReactForm extends Component {
 export class ItemTable extends Component {
     constructor(props) {
         super(props);
+        console.log(this.props);
 
         this.state = {
             measures: [],
-            dimensions: []
+            dimensions: [],
+            app: ''
         }
+        this.updateList = this.updateList.bind(this);
     }
 
-    componentDidMount() {
+    componentWillReceiveProps(newProps) {
+        console.log('New Props: ', newProps.app)
+        this.setState({
+            measures:[],
+            dimensions: [],
+            app: newProps.app
+        }, (r) => {
+            console.log('My new State: ', this.state)
+            this.updateList();
+        })
+        
+        
+    }
+
+    shouldComponentUpdate() {
+        return true;
+    }
+
+    componentWillMount(){
+    }
+
+    updateList() {
+        if(this.state.app =='') {return};
         let uri = window.location.protocol;
         uri += '//' + window.location.hostname;
         uri += (window.location.port.length > 0) ? (':' + window.location.port):'';
         uri += '/api/qsmasterpull';
-
-        console.log('Mounting');
-        console.log(uri);
 
         fetch(uri, {
             method: 'POST',
@@ -129,25 +151,31 @@ export class ItemTable extends Component {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
               },
-            body: JSON.stringify({"app": "C:\\Users\\bmichel\\Documents\\Qlik\\Sense\\Apps\\Consumer Goods Sales 3.0.qvf"})
+            body: JSON.stringify({"app": this.state.app})
         })
         .then((response) => {
             return response.json();
         })
         .then(resultArray => {
-            let msrArray = resultArray[0].map((msrObj) => {
+            let msrArray = resultArray[0].map((msrObj, idx) => {
                 return (
                     <tr>
-                         <td>{msrObj.qMeta.title}</td>
-                         <td>{msrObj.qMeta.description}</td>
+                        <td>{idx+1}</td>
+                        <td>{msrObj.title}</td>
+                        <td>{msrObj.label}</td>
+                        <td>{msrObj.desc}</td>
+                        <td>{msrObj.def}</td>
                     </tr>
                 )
             })
-            let dimArray = resultArray[1].map((dimObj) => {
+            let dimArray = resultArray[1].map((dimObj, idx) => {
                 return (
                     <tr>
-                         <td>{dimObj.qMeta.title}</td>
-                         <td>{dimObj.qMeta.description}</td>
+                        <td>{idx+1}</td>
+                        <td>{dimObj.title}</td>
+                        <td>{dimObj.label}</td>
+                        <td>{dimObj.desc}</td>
+                        <td>{dimObj.def}</td>
                     </tr>
                 )
             })
@@ -167,8 +195,11 @@ export class ItemTable extends Component {
                 <table>
                     <tbody>
                         <tr>
+                            <th>#</th>
                             <th>Name</th>
+                            <th>Label</th>
                             <th>Description</th>
+                            <th>Definition</th>
                         </tr>
                         {this.state.measures}
                     </tbody>
@@ -177,8 +208,11 @@ export class ItemTable extends Component {
                 <table>
                     <tbody>
                         <tr>
+                            <th>#</th>
                             <th>Name</th>
+                            <th>Label</th>
                             <th>Description</th>
+                            <th>Definition</th>
                         </tr>
                         {this.state.dimensions}
                     </tbody>
@@ -187,4 +221,58 @@ export class ItemTable extends Component {
         )
     }
 
+}
+
+export class AppDropDown extends Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            app: '',
+            apps: [],
+            value: '<Select App>'
+        }
+        this.handleChange = this.handleChange.bind(this);
+    }
+
+    componentWillMount() {
+        fetch('http://localhost:1212/api/qsgetdoclist')
+        .then((list) => {
+            return list.json();
+        })
+        .then((apps) => {
+            return apps.map((app, idx) => {
+                return (
+                    <option key={idx} value={app.qDocId}>{app.qDocName}</option>
+                )
+            })
+        })
+        .then((options) => {
+            this.setState({
+                apps: options
+            })
+        })
+    }
+
+    handleChange(event){
+        this.setState({
+            app: event.target.value,
+            value: event.target.text
+        })
+    }
+
+    render() {
+        console.log(this.state);
+        return(
+            <div>
+                <form>
+                    <select value={this.state.value} onChange={this.handleChange}>
+                        <option value=''>&lt;Select App&gt;</option>
+                        {this.state.apps}
+                    </select>
+                </form>
+                <ItemTable app={this.state.app} />
+            </div>
+        )
+    }
 }

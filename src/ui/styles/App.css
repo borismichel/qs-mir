@@ -2,3 +2,16 @@ h1 {
     color: rgb(0, 145,165);
     text-align: center;
 }
+body {
+    font-family: sans-serif;
+}
+
+select {
+    text-align: center;
+    padding: 5px;
+    border-radius: 5px;
+}
+
+option {
+    padding: 5px
+}
