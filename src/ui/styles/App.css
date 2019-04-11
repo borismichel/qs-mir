@@ -6,6 +6,10 @@ body {
     font-family: sans-serif;
 }
 
+tr, th {
+    font-size: 12px;
+}
+
 select {
     text-align: center;
     padding: 5px;
@@ -14,4 +18,22 @@ select {
 
 option {
     padding: 5px
+}
+
+.id {
+    min-width: 5px;
+    width: 5px;    
+    max-width: 15px;
+}
+
+.title {
+    min-width: 15px;
+    width: 150px;    
+    max-width: 335px;
+}
+
+.long {
+    min-width: 45px;
+    width: 500px;    
+    max-width:600px;
 }
