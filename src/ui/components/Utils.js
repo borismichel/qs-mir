@@ -2,33 +2,6 @@ import React, { Component } from "react";
 
 import '../styles/App.css';
 
-export function MyTable(props) {
-    return (
-        <table>
-            <tbody>
-                <tr>
-                    <th>Column 1</th>
-                    <th>Column 2</th>
-                    <th>Column 3</th>
-                </tr>
-                {props.rows.map((val, idx) => {
-                    return <MyTableRow key={idx} c1={val.c1} c2={val.c2} c3={val.c3}/>
-                })}
-            </tbody>
-        </table>
-    )
-}
-
-export function MyTableRow(props) {
-    return (
-        <tr>
-            <td>{props.c1}</td>
-            <td>{props.c2}</td>
-            <td>{props.c3}</td>
-        </tr>
-    )
-}
-
 export class MyReactForm extends Component {
     constructor(props) {
         super(props);
@@ -160,22 +133,22 @@ export class ItemTable extends Component {
             let msrArray = resultArray[0].map((msrObj, idx) => {
                 return (
                     <tr>
-                        <td>{idx+1}</td>
-                        <td>{msrObj.title}</td>
-                        <td>{msrObj.label}</td>
-                        <td>{msrObj.desc}</td>
-                        <td>{msrObj.def}</td>
+                        <td class="id">{idx+1}</td>
+                        <td class="title">{msrObj.title}</td>
+                        <td class="title">{msrObj.label}</td>
+                        <td class="title">{msrObj.desc}</td>
+                        <td class="long">{msrObj.def}</td>
                     </tr>
                 )
             })
             let dimArray = resultArray[1].map((dimObj, idx) => {
                 return (
                     <tr>
-                        <td>{idx+1}</td>
-                        <td>{dimObj.title}</td>
-                        <td>{dimObj.label}</td>
-                        <td>{dimObj.desc}</td>
-                        <td>{dimObj.def}</td>
+                        <td class="id">{idx+1}</td>
+                        <td class="title">{dimObj.title}</td>
+                        <td class="title">{dimObj.label}</td>
+                        <td class="title">{dimObj.desc}</td>
+                        <td class="long">{dimObj.def}</td>
                     </tr>
                 )
             })
@@ -195,11 +168,11 @@ export class ItemTable extends Component {
                 <table>
                     <tbody>
                         <tr>
-                            <th>#</th>
-                            <th>Name</th>
-                            <th>Label</th>
-                            <th>Description</th>
-                            <th>Definition</th>
+                            <th class="id">#</th>
+                            <th class="title">Name</th>
+                            <th class="title">Label</th>
+                            <th class="title">Description</th>
+                            <th class="long">Definition</th>
                         </tr>
                         {this.state.measures}
                     </tbody>
@@ -208,11 +181,11 @@ export class ItemTable extends Component {
                 <table>
                     <tbody>
                         <tr>
-                            <th>#</th>
-                            <th>Name</th>
-                            <th>Label</th>
-                            <th>Description</th>
-                            <th>Definition</th>
+                            <th class="id">#</th>
+                            <th class="title">Name</th>
+                            <th class="title">Label</th>
+                            <th class="title">Description</th>
+                            <th class="long">Definition</th>
                         </tr>
                         {this.state.dimensions}
                     </tbody>
