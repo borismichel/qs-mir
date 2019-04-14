@@ -83,6 +83,7 @@ export class ItemTable extends Component {
                     title: msrObj.title,
                     label: msrObj.label,
                     desc: msrObj.desc,
+                    id: msrObj.id,
                     def: msrObj.def
                 };
                 return (
@@ -104,6 +105,16 @@ export class ItemTable extends Component {
                 )
             })
             let dimArray = resultArray[1].map((dimObj, idx) => {
+                let valueObject = {
+                    type: 'dimension', 
+                    app: this.state.app,
+                    layout: dimObj.layout,
+                    title: dimObj.title,
+                    label: dimObj.label,
+                    desc: dimObj.desc,
+                    id: dimObj.id,
+                    def: dimObj.def
+                };
                 return (
                     <tr>
                         <td class="id">{idx+1}</td>
@@ -111,6 +122,14 @@ export class ItemTable extends Component {
                         <td class="title">{dimObj.label}</td>
                         <td class="title">{dimObj.desc}</td>
                         <td class="long">{dimObj.def}</td>
+                        <td>
+                            <input 
+                                class="btn btn-success"
+                                type="button"
+                                onClick={() => {this.handleSend(valueObject)}}
+                                value="Save"
+                            />
+                        </td>
                     </tr>
                 )
             })
@@ -141,7 +160,7 @@ export class ItemTable extends Component {
                     </tbody>
                 </table>
                 <h2>Dimensions</h2>
-                <table>
+                <table class="table table-striped">
                     <tbody>
                         <tr>
                             <th class="id">#</th>
@@ -149,6 +168,7 @@ export class ItemTable extends Component {
                             <th class="title">Label</th>
                             <th class="title">Description</th>
                             <th class="long">Definition</th>
+                            <th></th>
                         </tr>
                         {this.state.dimensions}
                     </tbody>
@@ -193,6 +213,10 @@ export class AppLoader extends Component {
                 apps: options
             })
         })
+    }
+
+    shouldComponentUpdate() {
+        return true;
     }
 
     handleChange(event){

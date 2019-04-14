@@ -71,7 +71,6 @@ export async function qsPullAndMapMasterItems (appid) {
         const global = await session.open();
         const app = await global.openDoc(appid);
         //Get Measures
-        console.log('Getting Details for ', appid);
         let getMeasureDetails = async function () {
             let obj =       await app.createSessionObject(myCubes.msre);
             var layout =    await obj.getLayout();
@@ -98,7 +97,6 @@ export async function qsPullAndMapMasterItems (appid) {
 
         //Get Dimesnions
         let getDimensionDetails = async function () {
-            console.log('Getting Dims')
             let obj = await app.createSessionObject(myCubes.dims);
             let layout = await obj.getLayout();
             
@@ -152,4 +150,54 @@ export async function qsGetDocList() {
     let list = await global.getDocList()
     session.close();
     return list;
+}
+
+export async function qsDeployMasterItem(appid, object) {
+    const session = await enigma.create({
+        schema,
+        url: config.qlikServer,
+        createSocket: url => new webSocket(url,{
+            // ca: root, < Uncomment when on Server
+            // key: key, < Uncomment when on Server
+            // cert: client, < Uncomment when on Server
+            headers: {
+                'X-Qlik-User': config.qlikUser
+            },
+        })
+    });
+
+    const global = await session.open();
+    const app = await global.openDoc(appid);
+
+    var result;
+
+    
+
+    if(object.qInfo.qType=="measure") {
+        let options = {
+            qInfo: object.qInfo,
+            qMeasure: object.qMeasure,
+            qMetaDef: {
+                title: object.qMeta.Title,
+                description: object.qMeta.description,
+                tags: object.qMeta.tags
+            }
+        }
+        result = await app.createMeasure(options);
+    } else if(object.qInfo.qType=="dimension") {
+        let options = {
+            qInfo: object.qInfo,
+            qDim: object.qDim,
+            qMetaDef: {
+                title: object.qMeta.title,
+                description: object.qMeta.description,
+                tags: object.qMeta.tags
+            }
+        }
+        result = await app.createDimension(options);
+    }
+
+    await app.doSave();
+    await app.session.close();
+    return result;
 }
