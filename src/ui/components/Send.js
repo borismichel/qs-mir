@@ -2,81 +2,6 @@ import React, { Component } from "react";
 
 import '../styles/App.css';
 
-export class MyReactForm extends Component {
-    constructor(props) {
-        super(props);
-        
-        this.state = {
-            save: false,
-            inputVal: 'default'
-        };
-
-        this.defaultState = {
-            save: false,
-            inputVal: 'default'
-        }
-
-        this.handleChange = this.handleChange.bind(this);
-        this.handleSend = this.handleSend.bind(this);
-    }
-
-    handleChange(event) {
-        let value = (event.target.type==='checkbox') ? event.target.checked : event.target.value;
-        this.setState(
-            {[event.target.name]: value}
-        )
-    }
-
-    handleSend(event) {
-        event.preventDefault();
-
-        // alert(((this.state.save==true) ? '':'Not ') + 'Saving:' + this.state.inputVal)
-        fetch('http://localhost:1212/submit', {
-            method: 'post',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(this.state)
-        })
-        .then((response)=> {
-            console.log(response);
-        })
-
-        this.setState(this.defaultState);
-    }
-
-    render(){
-        return (
-            <div>
-                <form onSubmit={this.handleSubmit}>
-                    <label>Save:</label>
-                    <input
-                        name='save'
-                        type='Checkbox'
-                        onChange={this.handleChange} 
-                    />
-                    <br />
-                    <label>Text:</label>
-                    <input  
-                        name='inputVal'
-                        type='text'
-                        placeholder={this.state.inputVal}
-                        onChange={this.handleChange} 
-                    />
-                    <br />
-                    <input type='button' onClick={this.handleSend} value='Send' />
-                </form>
-                <div>
-                    <p>
-                        {(this.state.save==true) ? '':'Not '} Saving: {this.state.inputVal}
-                    </p>
-                </div>
-            </div>
-        )
-    }
-
-}
-
 export class ItemTable extends Component {
     constructor(props) {
         super(props);
@@ -85,9 +10,18 @@ export class ItemTable extends Component {
         this.state = {
             measures: [],
             dimensions: [],
-            app: ''
+            app: '',
+            baseUrl: ''
         }
+        
+        let uri = window.location.protocol;
+        uri += '//' + window.location.hostname;
+        uri += (window.location.port.length > 0) ? (':' + window.location.port):'';
+
+        this.setState({baseUrl: uri});
+
         this.updateList = this.updateList.bind(this);
+        this.handleSend = this.handleSend.bind(this);
     }
 
     componentWillReceiveProps(newProps) {
@@ -111,12 +45,23 @@ export class ItemTable extends Component {
     componentWillMount(){
     }
 
+    handleSend(object) {
+        let sendUrl = this.state.baseUrl + '/api/storeobject'
+
+        console.log('Sending', object)
+
+        fetch(sendUrl, {
+            method: 'post',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(object)
+        })
+    }
+
     updateList() {
-        if(this.state.app =='') {return};
-        let uri = window.location.protocol;
-        uri += '//' + window.location.hostname;
-        uri += (window.location.port.length > 0) ? (':' + window.location.port):'';
-        uri += '/api/qsmasterpull';
+        if (this.state.app =='') {return};
+        let uri = this.state.baseUrl + '/api/qsmasterpull';
 
         fetch(uri, {
             method: 'POST',
@@ -131,13 +76,30 @@ export class ItemTable extends Component {
         })
         .then(resultArray => {
             let msrArray = resultArray[0].map((msrObj, idx) => {
+                let valueObject = {
+                    type: 'measure', 
+                    app: this.state.app,
+                    layout: msrObj.layout,
+                    title: msrObj.title,
+                    label: msrObj.label,
+                    desc: msrObj.desc,
+                    def: msrObj.def
+                };
                 return (
                     <tr>
                         <td class="id">{idx+1}</td>
                         <td class="title">{msrObj.title}</td>
                         <td class="title">{msrObj.label}</td>
                         <td class="title">{msrObj.desc}</td>
-                        <td class="long">{msrObj.def}</td>
+                        <td class="long"><code>{msrObj.def}</code></td>
+                        <td>
+                            <input 
+                                class="btn btn-success"
+                                type="button"
+                                onClick={() => {this.handleSend(valueObject)}}
+                                value="Save"
+                            />
+                        </td>
                     </tr>
                 )
             })
@@ -165,7 +127,7 @@ export class ItemTable extends Component {
         return (
             <div>
                 <h2>Measures</h2>
-                <table>
+                <table class="table table-striped">
                     <tbody>
                         <tr>
                             <th class="id">#</th>
@@ -173,6 +135,7 @@ export class ItemTable extends Component {
                             <th class="title">Label</th>
                             <th class="title">Description</th>
                             <th class="long">Definition</th>
+                            <th></th>
                         </tr>
                         {this.state.measures}
                     </tbody>
@@ -196,7 +159,7 @@ export class ItemTable extends Component {
 
 }
 
-export class AppDropDown extends Component {
+export class AppLoader extends Component {
     constructor(props) {
         super(props);
 
@@ -208,8 +171,13 @@ export class AppDropDown extends Component {
         this.handleChange = this.handleChange.bind(this);
     }
 
-    componentWillMount() {
-        fetch('http://localhost:1212/api/qsgetdoclist')
+    componentWillMount() {        
+        let uri = window.location.protocol;
+        uri += '//' + window.location.hostname;
+        uri += (window.location.port.length > 0) ? (':' + window.location.port):'';
+        uri += '/api/qsgetdoclist';
+
+        fetch(uri)
         .then((list) => {
             return list.json();
         })
@@ -237,8 +205,9 @@ export class AppDropDown extends Component {
     render() {
         console.log(this.state);
         return(
-            <div>
+            <div>                
                 <form>
+                    <label>Select App:</label>
                     <select value={this.state.value} onChange={this.handleChange}>
                         <option value=''>&lt;Select App&gt;</option>
                         {this.state.apps}

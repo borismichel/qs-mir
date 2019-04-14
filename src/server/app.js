@@ -5,6 +5,7 @@ const path = require('path');
 // Custom Packages
 
 const qs = require('./qs/qs');
+const db = require('./db/db');
 
 const app = express();
 
@@ -25,6 +26,20 @@ app.post('/api/qsmasterpull', (req,res) => {
     })
 })
 
+app.get('/api/qsgetdoclist', (req, res) => {
+    qs.qsGetDocList().then((list) => {
+        console.log('API', 'Sending Doc List')
+        res.send(list);
+        res.end();
+    })
+})
+
+app.get('/api/getstoreditems', async (req, res) => {
+    let rows = await db.getStoredItems();
+    res.send(rows)
+    res.end();
+})
+
 app.get('/test', (req,res) => {
     let appid = "C:\\Users\\Boris Michel\\Documents\\Qlik\\Sense\\Apps\\Consumer Sales.qvf" //req.body.app;
     console.log('API', 'Sending Master Items')
@@ -35,17 +50,16 @@ app.get('/test', (req,res) => {
     })
 })
 
-app.get('/api/qsgetdoclist', (req, res) => {
-    qs.qsGetDocList().then((list) => {
-        console.log('API', 'Sending Doc List')
-        res.send(list);
-        res.end();
-    })
+app.post('/api/storeobject', async (req,res) => {
+    console.log('API received Master Item Object for Storage');
+    let store = await db.storeMasterItem(req.body.type, req.body.app, req.body.layout, req.body.title, req.body.label, req.body.desc, req.body.def)
+    console.log(store);
+    res.send('Received, Carry on.');
+    res.end();
 })
 
 app.post('/submit', (req, res) => {
-    res.setHeader('Content-Type', 'text/plain');
-    res.write('you posted:\n');
+    res.send('you posted:\n');
     res.end(JSON.stringify(req.body, null, 2));
     console.log(JSON.stringify(req.body, null, 2));
 })
