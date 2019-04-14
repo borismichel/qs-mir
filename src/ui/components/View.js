@@ -80,10 +80,11 @@ export class SavedItemsTable extends Component {
             let savedItems = response.map((item, idx) => {
                 return (
                     <tr>
-                        <td>{item.objectid}</td>
-                        <td>{item.type}</td>
-                        <td>{item.name}</td>
+                        <td><b>{item.name}</b></td>
                         <td>{item.description}</td>
+                        <td>{item.type}</td>
+                        <td>{item.app}</td>
+                        <td>{item.objectid}</td>
                         <td><code>{item.definition}</code></td>
                         <td>
                             <input
@@ -116,24 +117,29 @@ export class SavedItemsTable extends Component {
     
     render(){
         return (
-            <div>
-                <h2>Measures</h2>
-                <table class="table table-striped">
-                    <tbody>
-                        <tr>
-                            <th>Object Id</th>
-                            <th>Type</th>
-                            <th>Name</th>
-                            <th>Description</th>
-                            <th>Definition</th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                        </tr>
-                        {this.state.items}
-                    </tbody>
-                </table>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    Saved Items
+                </div>
+                <div class="panel-body">
+                    <table class="table table-striped">
+                        <tbody>
+                            <tr>
+                                <th>Name</th>
+                                <th>Description</th>
+                                <th>Type</th>
+                                <th>Original App</th>
+                                <th>Object Id</th>
+                                <th>Definition</th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                            {this.state.items}
+                        </tbody>
+                    </table>
+                </div>
             </div>  
         )
     }
@@ -221,19 +227,22 @@ export class AppSelector extends Component {
     render() {
         console.log(this.state);
         return(
-            <div>                
-                <form>
-                    <select value={this.state.value} onChange={this.handleChange}>
+            <div class="input-group">         
+                <select class="form-control"
+                    value={this.state.value} 
+                    onChange={this.handleChange}
+                    >
                         <option value=''>&lt;Select App&gt;</option>
                         {this.state.apps}
-                    </select>
+                </select>
+                <span class="input-group-btn">
                     <input
                         class="btn btn-info"
                         type="button"
                         value="Export"
                         onClick={() => {this.handleSend(this.state.id, 'export', this.state.object)}}
                     />
-                </form>
+                </span>
             </div>
         )
     }

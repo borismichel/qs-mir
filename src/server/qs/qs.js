@@ -178,7 +178,7 @@ export async function qsDeployMasterItem(appid, object) {
             qInfo: object.qInfo,
             qMeasure: object.qMeasure,
             qMetaDef: {
-                title: object.qMeta.Title,
+                title: object.qMeta.title,
                 description: object.qMeta.description,
                 tags: object.qMeta.tags
             }
