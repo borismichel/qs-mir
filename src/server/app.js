@@ -52,10 +52,19 @@ app.get('/test', (req,res) => {
 
 app.post('/api/storeobject', async (req,res) => {
     console.log('API received Master Item Object for Storage');
-    let store = await db.storeMasterItem(req.body.type, req.body.app, req.body.layout, req.body.title, req.body.label, req.body.desc, req.body.def)
-    console.log(store);
+    let store = await db.storeMasterItem(req.body.type, req.body.app, req.body.layout, req.body.title, req.body.label, req.body.desc, req.body.def, req.body.id);
     res.send('Received, Carry on.');
     res.end();
+    console.log('API completed Master Item Object for Storage');
+})
+
+app.post('/api/editobject', async (req,res) => {
+    console.log('API received Master Item Object for Editing');
+    console.log('API request', req.body);
+    await db.editMasterItem(req.body.id, req.body.method, JSON.parse(req.body.object), req.body.app);
+    res.send('Received, Carry on.');
+    res.end();
+    console.log('API completed Master Item Object for Editing');
 })
 
 app.post('/submit', (req, res) => {
