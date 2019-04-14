@@ -186,9 +186,11 @@ export class AppLoader extends Component {
         this.state = {
             app: '',
             apps: [],
+            selected_app: '',
             value: '<Select App>'
         }
         this.handleChange = this.handleChange.bind(this);
+        this.loadAppData = this.loadAppData.bind(this);
     }
 
     componentWillMount() {        
@@ -221,23 +223,42 @@ export class AppLoader extends Component {
 
     handleChange(event){
         this.setState({
-            app: event.target.value,
+            selected_app: event.target.value,
             value: event.target.text
+        })
+    }
+
+    loadAppData(){
+        this.setState({
+            app: this.state.selected_app
         })
     }
 
     render() {
         console.log(this.state);
         return(
-            <div>                
-                <form>
-                    <label>Select App:</label>
-                    <select value={this.state.value} onChange={this.handleChange}>
-                        <option value=''>&lt;Select App&gt;</option>
-                        {this.state.apps}
-                    </select>
-                </form>
-                <ItemTable app={this.state.app} />
+            <div class="panel panel-default">
+                <div class="panel-heading">Select an App to View Master Items</div>    
+                <div class="panel-body">
+                    <div class="input-group">
+                        <select 
+                            class="form-control"
+                            value={this.state.value} 
+                            onChange={this.handleChange}>
+                            <option value=''>&lt;Select App&gt;</option>
+                            {this.state.apps}
+                        </select>
+                        <span class="input-group-btn">
+                            <input 
+                                class="btn btn-success"
+                                type="button"
+                                value="Load"
+                                onClick={this.loadAppData}
+                            />
+                        </span>
+                    </div>
+                    <ItemTable app={this.state.app} />
+                </div>
             </div>
         )
     }
