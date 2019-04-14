@@ -14,9 +14,9 @@ const webSocket = require('ws');
 // session.on('traffic:sent', data => console.log('sent:', data));
 // session.on('traffic:received', data => console.log('received:', data));
 
-export function qsPullMasterItems (appid) {
+export async function qsPullMasterItems (appid) {
 
-    const session = enigma.create({
+    const session = await enigma.create({
         schema,
         url: config.qlikServer,
         createSocket: url => new webSocket(url,{
@@ -29,176 +29,127 @@ export function qsPullMasterItems (appid) {
         })
     });
 
-    return new Promise((resolve, reject) => {
-        session.open()
-        .then((global) => {
-            return global.openDoc(appid)
-        }).then((app) => {
+    const global = await session.open();
+    const app = await global.openDoc(appid);
 
-            //Get Measures
-            var p1 = new Promise((resolve, reject) => {
-                app.createSessionObject(myCubes.msre).then((obj) => {
-    
-                    obj.getLayout().then( (layout) => {                        
-                        resolve(layout.qMeasureList.qItems);
-                    }).catch(err => console.log('Rejection: ', err))
-    
-                }).catch(err => console.log('Rejection: ', err));
-    
-            }).catch(err => console.log('Rejection: ', err));
-    
-            //Get Dimesnions
-            var p2 = new Promise( (resolve, reject) => {
-                app.createSessionObject(myCubes.dims).then((obj) => {
-    
-                    obj.getLayout().then( (layout) => {
-                        resolve(layout.qDimensionList.qItems);    
-                    }).catch(err => console.log('Rejection: ', err));
-    
-                }).catch(err => console.log('Rejection: ', err));
-    
-            }).catch(err => console.log('Rejection: ', err));
-            
-            //Pass through app object
-            var p3 = Promise.resolve(app);
-    
-            return Promise.all([p1, p2, p3])
+    let getMeasures = async function() {
+        let obj = await app.createSessionObject(myCubes.msre);
+        let layout = await obj.getLayout();                        
         
-        }).then((r) => {
-            r[2].session.close(); //Close App
-            return [r[0], r[1]];                              
-        }).then((results) => {
-            session.close();
-            resolve(results);
-        })
-        .catch(err => console.log('Rejection: ', err))
-    })
+        return layout.qMeasureList.qItems;
+    }
+    let getDimensions = async function() {
+        let obj = await app.createSessionObject(myCubes.dims);
+        let layout = await obj.getLayout();
+        
+        return layout.qDimensionList.qItems;    
+    }
+
+    let result = await Promise.all([getMeasures(), getDimensions()]);
+            
+    app.session.close();
+    session.close();
+
+    return result;
 };
 
-export function qsPullAndMapMasterItems (appid) {
-
-    const session = enigma.create({
-        schema,
-        url: config.qlikServer,
-        createSocket: url => new webSocket(url,{
-            // ca: root, < Uncomment when on Server
-            // key: key, < Uncomment when on Server
-            // cert: client, < Uncomment when on Server
-            headers: {
-                'X-Qlik-User': config.qlikUser
-            },
-        })
-    });
-
-    return new Promise((resolve, reject) => {
-        session.open()
-        .then((global) => {
-            return global.openDoc(appid)
-        }).then((app) => {
-
-            //Get Measures
-            var p1 = new Promise((resolve, reject) => {
-                app.createSessionObject(myCubes.msre).then((obj) => {
-    
-                    obj.getLayout().then( (layout) => {
-                        let msrDetail = layout.qMeasureList.qItems.map((measure) => {
-                            return new Promise((resolve, reject) => {
-                                app.getMeasure(measure.qInfo.qId)
-                                .then((msrObj) => {
-                                    return msrObj.getLayout()
-                                    .then((layout) => {
-                                        let returnObject = {
-                                            id:     layout.qInfo.qId,
-                                            label:  layout.qMeasure.qLabel,
-                                            def:    layout.qMeasure.qDef,
-                                            title:  layout.qMeta.title,
-                                            desc:   layout.qMeta.description,
-                                            layout: layout
-                                        };                                  
-                                        resolve(returnObject);
-                                    })
-                                })
-                            }).catch(err => console.log('Rejection: ', err))
-                        })
-                        Promise.all(msrDetail).then((rArr) => {
-                            resolve(rArr);
-                        })
-                    }).catch(err => console.log('Rejection: ', err))
-    
-                }).catch(err => console.log('Rejection: ', err));
-    
-            }).catch(err => console.log('Rejection: ', err));
-    
-            //Get Dimesnions
-            var p2 = new Promise( (resolve, reject) => {
-                app.createSessionObject(myCubes.dims).then((obj) => {
-    
-                    obj.getLayout().then( (layout) => {
-                        let dimDetail = layout.qDimensionList.qItems.map((dimension) => {
-                            return new Promise((resolve, reject) => {
-                                app.getDimension(dimension.qInfo.qId)
-                                .then((dimObj) => {
-                                    return dimObj.getLayout()
-                                    .then((layout) => {
-                                        let returnObject = {
-                                            id:     layout.qInfo.qId,
-                                            label:  layout.qDim.qFieldLabels[0],
-                                            def:    layout.qDim.qFieldDefs[0],
-                                            title:  layout.qMeta.title,
-                                            desc:   layout.qMeta.description,
-                                            layout: layout
-                                        };                                  
-                                        resolve(returnObject);
-                                    })
-                                }).catch(err => console.log('Rejection: ', err))
-                            }).catch(err => console.log('Rejection: ', err))
-                        });
-                        Promise.all(dimDetail).then((dimArr) => {
-                            resolve(dimArr);
-                        }).catch(err => console.log('Rejection: ', err))                    
-                    }).catch(err => console.log('Rejection: ', err));
-    
-                }).catch(err => console.log('Rejection: ', err));
-    
-            }).catch(err => console.log('Rejection: ', err));
-            
-            //Pass through app object
-            var p3 = Promise.resolve(app);
-    
-            return Promise.all([p1, p2, p3])
-        
-        }).then((r) => {
-            r[2].session.close(); //Close App
-            return [r[0], r[1]];                              
-        }).then((results) => {
-            session.close();
-            resolve(results);
-        })
-        .catch(err => console.log('Rejection: ', err))
-    })
-};
-
-export function qsGetDocList() {
-    const session = enigma.create({
-        schema,
-        url: config.qlikServer,
-        createSocket: url => new webSocket(url,{
-            // ca: root, < Uncomment when on Server
-            // key: key, < Uncomment when on Server
-            // cert: client, < Uncomment when on Server
-            headers: {
-                'X-Qlik-User': config.qlikUser
-            },
-        })
-    });
-
-    return new Promise((resolve, reject) => {
-        session.open()
-        .then((global) => {
-            global.getDocList().then((list) => {
-                resolve(list);
-                session.close();
+export async function qsPullAndMapMasterItems (appid) {
+    try {
+        const session = await enigma.create({
+            schema,
+            url: config.qlikServer,
+            createSocket: url => new webSocket(url,{
+                // ca: root, < Uncomment when on Server
+                // key: key, < Uncomment when on Server
+                // cert: client, < Uncomment when on Server
+                headers: {
+                    'X-Qlik-User': config.qlikUser
+                },
             })
+        });
+
+        const global = await session.open();
+        const app = await global.openDoc(appid);
+        //Get Measures
+        console.log('Getting Details for ', appid);
+        let getMeasureDetails = async function () {
+            let obj =       await app.createSessionObject(myCubes.msre);
+            var layout =    await obj.getLayout();
+            
+            return await Promise.all(
+                layout.qMeasureList.qItems.map((measure) => {
+                    let getDetails = async function() {
+                        let msrObj = await app.getMeasure(measure.qInfo.qId);
+                        let layout = await msrObj.getLayout();
+                        let returnObject = {
+                            id:     layout.qInfo.qId,
+                            label:  layout.qMeasure.qLabel,
+                            def:    layout.qMeasure.qDef,
+                            title:  layout.qMeta.title,
+                            desc:   layout.qMeta.description,
+                            layout: layout
+                        };                                  
+                        return returnObject;
+                    }
+                    return getDetails();
+                })
+            );
+        }
+
+        //Get Dimesnions
+        let getDimensionDetails = async function () {
+            console.log('Getting Dims')
+            let obj = await app.createSessionObject(myCubes.dims);
+            let layout = await obj.getLayout();
+            
+            return await Promise.all(
+                layout.qDimensionList.qItems.map((dimension) => {
+                    let getDetails = async function () {
+                        let dimObj = await app.getDimension(dimension.qInfo.qId);
+                        let layout = await dimObj.getLayout();
+                        let returnObject = {
+                            id:     layout.qInfo.qId,
+                            label:  layout.qDim.qFieldLabels[0],
+                            def:    layout.qDim.qFieldDefs[0],
+                            title:  layout.qMeta.title,
+                            desc:   layout.qMeta.description,
+                            layout: layout
+                        };                                  
+                        return returnObject;
+                    }
+                    return getDetails();
+                })
+            )
+        }
+
+        let result = await Promise.all([getMeasureDetails(),getDimensionDetails()]);
+
+        app.session.close(); //Close App
+        session.close();
+
+        return result;
+
+    } catch(error) {
+        console.error(error)
+    }
+};
+
+export async function qsGetDocList() {
+    const session = await enigma.create({
+        schema,
+        url: config.qlikServer,
+        createSocket: url => new webSocket(url,{
+            // ca: root, < Uncomment when on Server
+            // key: key, < Uncomment when on Server
+            // cert: client, < Uncomment when on Server
+            headers: {
+                'X-Qlik-User': config.qlikUser
+            },
         })
-    })
+    });
+
+    let global = await session.open();
+    let list = await global.getDocList()
+    session.close();
+    return list;
 }
