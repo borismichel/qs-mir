@@ -121,13 +121,13 @@ export class ItemTable extends Component {
                         <td class="title">{dimObj.title}</td>
                         <td class="title">{dimObj.label}</td>
                         <td class="title">{dimObj.desc}</td>
-                        <td class="long">{dimObj.def}</td>
+                        <td class="long"><code>{dimObj.def}</code></td>
                         <td>
                             <input 
                                 class="btn btn-success"
                                 type="button"
                                 onClick={() => {this.handleSend(valueObject)}}
-                                value="Save"
+                                value="Import to Repo"
                             />
                         </td>
                     </tr>
