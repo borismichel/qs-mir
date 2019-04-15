@@ -21,3 +21,7 @@ option {
         max-width: 1300px;
     }
 }
+
+.app-select {
+    width: 33%;
+}

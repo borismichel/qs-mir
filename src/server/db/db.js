@@ -15,6 +15,9 @@ export async function storeMasterItem(type, app, object, name, label, desc, def,
 export async function editMasterItem(id, method, object, app) {
     var sql;
     var res;
+
+    var layout = (object) ? JSON.parse(object):'';
+
     switch (method) {
         case 'delete':
         sql = 'DELETE FROM items WHERE id = ' + id + ';';
@@ -32,7 +35,7 @@ export async function editMasterItem(id, method, object, app) {
         break;
 
         case 'export':
-        res = await qs.qsDeployMasterItem(app, object);
+        res = await qs.qsDeployMasterItem(app, layout);
         break;
     }
 
