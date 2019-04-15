@@ -98,7 +98,7 @@ export class ItemTable extends Component {
                                 class="btn btn-success"
                                 type="button"
                                 onClick={() => {this.handleSend(valueObject)}}
-                                value="Save"
+                                value="Import to Repo"
                             />
                         </td>
                     </tr>
@@ -240,7 +240,7 @@ export class AppLoader extends Component {
             <div class="panel panel-default">
                 <div class="panel-heading">Select an App to View Master Items</div>    
                 <div class="panel-body">
-                    <div class="input-group">
+                    <div class="input-group app-select">
                         <select 
                             class="form-control"
                             value={this.state.value} 
