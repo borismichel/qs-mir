@@ -153,7 +153,7 @@ export class AppSelector extends Component {
         this.state = {
             app: '',
             apps: [],
-            value: '<Select App>',
+            value: 'App',
             id: this.props.id,
             object: this.props.object, 
             baseUrl : ''
@@ -232,7 +232,7 @@ export class AppSelector extends Component {
                     value={this.state.value} 
                     onChange={this.handleChange}
                     >
-                        <option value=''>&lt;Select App&gt;</option>
+                        <option value=''>App</option>
                         {this.state.apps}
                 </select>
                 <span class="input-group-btn">
