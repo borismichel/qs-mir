@@ -25,3 +25,7 @@ option {
 .app-select {
     width: 33%;
 }
+
+.btn {
+    font-size: 12px;
+}
