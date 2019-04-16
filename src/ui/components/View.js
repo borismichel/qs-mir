@@ -91,16 +91,16 @@ export class SavedItemsTable extends Component {
                     <table class="table table-striped">
                         <tbody>
                             <tr>
-                                <th>Name</th>
-                                <th>Description</th>
-                                <th>Type</th>
-                                <th>Original App</th>
-                                <th>Object Id</th>
-                                <th>Definition</th>
-                                <th></th>
-                                <th></th>
-                                <th></th>
-                                <th></th>
+                                <th class="name">Name</th>
+                                <th class="description">Description</th>
+                                <th class="type">Type</th>
+                                <th class="app">Original App</th>
+                                <th class="objectid">Object Id</th>
+                                <th class="definition">Definition</th>
+                                <th class="single-button"></th>
+                                <th class="single-button"></th>
+                                <th class="single-button"></th>
+                                <th class="form-app-select"></th>
                             </tr>
                             {this.state.items}
                         </tbody>
@@ -256,7 +256,8 @@ export class ItemLine extends Component {
             var jsx='';
             switch(type) {
                 case 'textarea':
-                jsx = <textarea>{text}</textarea>
+                let rows = (text) ? (text.length/50):1;
+                jsx = <textarea cols="50" rows={rows}>{text}</textarea>
                 break;
 
                 case 'input':
@@ -282,13 +283,13 @@ export class ItemLine extends Component {
     render() {
         return (
             <tr>
-                <td><b>{this.setTdOrInput('input', this.state.name)}</b></td>
-                <td>{this.setTdOrInput('textarea',this.state.description)}</td>
-                <td>{this.state.type}</td>
-                <td>{this.state.app}</td>
-                <td>{this.state.objectid}</td>
-                <td><code>{this.setTdOrInput('textarea', this.state.definition)}</code></td>
-                <td>
+                <td class="name"><b>{this.setTdOrInput('input', this.state.name)}</b></td>
+                <td class="description">{this.setTdOrInput('input',this.state.description)}</td>
+                <td class="type">{this.state.type}</td>
+                <td class="app">{this.state.app}</td>
+                <td class="objectid">{this.state.objectid}</td>
+                <td class="definition"><code>{this.setTdOrInput('textarea', this.state.definition)}</code></td>
+                <td class="single-button">
                     <button
                         class={this.toggleBtnClass()}
                         type="button"
@@ -299,7 +300,7 @@ export class ItemLine extends Component {
                         <i class="fas fa-pencil-alt" />
                     </button>
                 </td>
-                <td>
+                <td class="single-button">
                     <button
                         class={this.setBtnClass("btn btn-danger")}
                         type="button"
@@ -310,7 +311,7 @@ export class ItemLine extends Component {
                         <i class="fas fa-trash-alt" />
                     </button>
                 </td>
-                <td>
+                <td class="single-button">
                     <button
                         class={this.setBtnClass("btn btn-warning")}
                         type="button"
@@ -321,7 +322,7 @@ export class ItemLine extends Component {
                         <i class="fas fa-angle-double-right" />
                     </button>
                 </td>
-                <td>
+                <td class="form-app-select">
                     <AppSelector 
                         object={this.state.object}
                         id={this.state.id}
