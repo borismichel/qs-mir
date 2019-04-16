@@ -29,3 +29,36 @@ option {
 .btn {
     font-size: 12px;
 }
+
+td.name, th.name {
+    width: 10%;
+}
+
+td.description, th.description {
+    width: 15%;
+}
+
+td.type, th.type {
+    width: 10%;
+}
+
+td.app, th.app {
+    width:15%;
+}
+
+td.objectid, th.objectid {
+    width: 10%;
+}
+
+
+td.definition, th.definition {
+    width: 25%;
+}
+
+td.single-button, th.single-button {
+    width: 2%;
+}
+
+td.form-app-select, th.form-app-select {
+    width: 10%;
+}
