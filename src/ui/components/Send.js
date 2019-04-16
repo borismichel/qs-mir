@@ -1,6 +1,5 @@
 import React, { Component } from "react";
-
-import '../styles/App.css';
+import { ImportLineItem } from "./ImportLineItem";
 
 export class ItemTable extends Component {
     constructor(props) {
@@ -21,21 +20,21 @@ export class ItemTable extends Component {
         this.setState({baseUrl: uri});
 
         this.updateList = this.updateList.bind(this);
-        this.handleSend = this.handleSend.bind(this);
     }
 
     componentWillReceiveProps(newProps) {
-        console.log('New Props: ', newProps.app)
+        let fetchNew = newProps.app!==this.state.app; //If I knew what I was doing, this would be redundant?!
         this.setState({
-            measures:[],
-            dimensions: [],
             app: newProps.app
-        }, (r) => {
-            console.log('My new State: ', this.state)
-            this.updateList();
-        })
-        
-        
+        }, () =>  {
+            if (fetchNew) {
+                this.setState({
+                    measures:[],
+                    dimensions: []
+                }, () => this.updateList()
+                );
+            }
+        })               
     }
 
     shouldComponentUpdate() {
@@ -43,20 +42,6 @@ export class ItemTable extends Component {
     }
 
     componentWillMount(){
-    }
-
-    handleSend(object) {
-        let sendUrl = this.state.baseUrl + '/api/storeobject'
-
-        console.log('Sending', object)
-
-        fetch(sendUrl, {
-            method: 'post',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(object)
-        })
     }
 
     updateList() {
@@ -76,69 +61,41 @@ export class ItemTable extends Component {
         })
         .then(resultArray => {
             let msrArray = resultArray[0].map((msrObj, idx) => {
-                let valueObject = {
-                    type: 'measure', 
-                    app: this.state.app,
-                    layout: msrObj.layout,
-                    title: msrObj.title,
-                    label: msrObj.label,
-                    desc: msrObj.desc,
-                    id: msrObj.id,
-                    def: msrObj.def
-                };
                 return (
-                    <tr>
-                        <td class="id">{idx+1}</td>
-                        <td class="title">{msrObj.title}</td>
-                        <td class="title">{msrObj.label}</td>
-                        <td class="title">{msrObj.desc}</td>
-                        <td class="long"><code>{msrObj.def}</code></td>
-                        <td>
-                            <input 
-                                class="btn btn-success"
-                                type="button"
-                                onClick={() => {this.handleSend(valueObject)}}
-                                value="Import to Repo"
-                            />
-                        </td>
-                    </tr>
+                    <ImportLineItem 
+                        type=   'measure'
+                        app=    {this.state.app}
+                        layout= {msrObj.layout}
+                        title=  {msrObj.title}
+                        label=  {msrObj.label}
+                        desc=   {msrObj.desc}
+                        id=     {msrObj.id}
+                        def=    {msrObj.def}
+                        line=   {idx+1}
+                        url=    {this.state.baseUrl}
+                    />
                 )
             })
             let dimArray = resultArray[1].map((dimObj, idx) => {
-                let valueObject = {
-                    type: 'dimension', 
-                    app: this.state.app,
-                    layout: dimObj.layout,
-                    title: dimObj.title,
-                    label: dimObj.label,
-                    desc: dimObj.desc,
-                    id: dimObj.id,
-                    def: dimObj.def
-                };
                 return (
-                    <tr>
-                        <td class="id">{idx+1}</td>
-                        <td class="title">{dimObj.title}</td>
-                        <td class="title">{dimObj.label}</td>
-                        <td class="title">{dimObj.desc}</td>
-                        <td class="long"><code>{dimObj.def}</code></td>
-                        <td>
-                            <input 
-                                class="btn btn-success"
-                                type="button"
-                                onClick={() => {this.handleSend(valueObject)}}
-                                value="Import to Repo"
-                            />
-                        </td>
-                    </tr>
+                    <ImportLineItem 
+                        type=   'dimension'
+                        app=    {this.state.app}
+                        layout= {dimObj.layout}
+                        title=  {dimObj.title}
+                        label=  {dimObj.label}
+                        desc=   {dimObj.desc}
+                        id=     {dimObj.id}
+                        def=    {dimObj.def}
+                        line=   {idx+1}
+                        url=    {this.state.baseUrl}
+                    />
                 )
             })
-            console.log(dimArray);
             this.setState({
                 measures: msrArray,
                 dimensions: dimArray
             })
-            console.log('State: ', this.state)
         })
     }
     
@@ -263,3 +220,4 @@ export class AppLoader extends Component {
         )
     }
 }
+

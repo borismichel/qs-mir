@@ -1,7 +1,5 @@
 import React, { Component } from "react";
 
-import '../styles/App.css';
-
 export class SavedItemsTable extends Component {
     constructor(props) {
         super(props);
@@ -62,7 +60,7 @@ export class SavedItemsTable extends Component {
             console.log(response)
             let savedItems = response.map((item, idx) => {
                 return (
-                        <ItemLine 
+                        <ExportLineItem 
                             key=        {item.id}
                             name=       {item.name}
                             description={item.description}
@@ -195,7 +193,7 @@ export class AppSelector extends Component {
     }
 }
 
-export class ItemLine extends Component {
+export class ExportLineItem extends Component {
     constructor(props) {
         super(props);
 
