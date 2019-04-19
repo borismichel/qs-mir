@@ -72,6 +72,7 @@ export class ItemTable extends Component {
                         id=     {msrObj.id}
                         def=    {msrObj.def}
                         line=   {idx+1}
+                        version= {msrObj.version}
                         url=    {this.state.baseUrl}
                     />
                 )
@@ -88,6 +89,7 @@ export class ItemTable extends Component {
                         id=     {dimObj.id}
                         def=    {dimObj.def}
                         line=   {idx+1}
+                        version= {dimObj.version}
                         url=    {this.state.baseUrl}
                     />
                 )
