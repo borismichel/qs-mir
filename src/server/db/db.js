@@ -7,9 +7,10 @@ const qs = require('../qs/qs');
 const item_database = './src/server/db/db.db';   //resources
 const db = new sqlite3.Database(item_database);   
 
-export async function storeMasterItem(type, app, object, name, label, desc, def, objectid) {
-    let sql = 'INSERT INTO items (type, app, object, name, label, description, definition, objectid) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
-    return db.run(sql, type, app, JSON.stringify(object), name, label, desc, def, objectid);
+export async function storeMasterItem(type, app, object, name, label, desc, def, objectid, version) {
+    let sql = 'INSERT INTO items (type, app, object, name, label, description, definition, objectid, version) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)';
+    let v = (version) ? version + 1:1;
+    return db.run(sql, type, app, JSON.stringify(object), name, label, desc, def, objectid, v);
 }
 
 export async function editMasterItem(id, method, object, app) {
@@ -48,6 +49,20 @@ export async function getStoredItems() {
         db.all(sql, function(err, items) {
             if(err) {console.error(err)};
             resolve(items);
+        })
+    })
+}
+
+export async function getMaxVersionForItem(app, object) {
+    let sql = 'SELECT max(version) as Max, app, objectid FROM items WHERE app="'+ app +'" AND objectid="'+ object + '" GROUP BY app, objectid;';
+    return new Promise((resolve, reject) => {
+        db.all(sql, function(err, items) {
+            if(err) {console.error(err)};  
+            if (items.length > 0) {
+                resolve(items[0].Max);
+            } else {
+                resolve(false)
+            }
         })
     })
 }

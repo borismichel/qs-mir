@@ -17,6 +17,7 @@ export class ImportLineItem extends Component {
             def:    this.props.def,
             line:   this.props.line,
             baseUrl: this.props.url,
+            version: this.props.version,
             imported: false
         }
 
@@ -43,13 +44,14 @@ export class ImportLineItem extends Component {
     render(){
         var buttonClass = (this.state.imported) ? "btn disabled":"btn btn-success";
         var buttonText = (this.state.imported) ? "Imported":"Import to Repo";
+        var currentVersion = (this.state.version) ? "Prev. v" + this.state.version:'New Import';
         return (
             <tr>
-                <td class="id">{this.state.line}</td>
-                <td class="title">{this.state.title}</td>
-                <td class="title">{this.state.label}</td>
-                <td class="title">{this.state.desc}</td>
-                <td class="long"><code>{this.state.def}</code></td>
+                <td>{this.state.line}</td>
+                <td>{this.state.title}</td>
+                <td>{this.state.label}</td>
+                <td>{this.state.desc}</td>
+                <td><code>{this.state.def}</code></td>
                 <td>
                     <input 
                         class={buttonClass}
@@ -58,6 +60,7 @@ export class ImportLineItem extends Component {
                         value={buttonText}
                     />
                 </td>
+                <td>{currentVersion}</td>
             </tr>
         )
     }

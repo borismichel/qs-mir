@@ -4,6 +4,8 @@ const enigma  = require('enigma.js');
 const schema  = require('enigma.js/schemas/12.34.11.json');
 const webSocket = require('ws');
 
+const db = require('../db/db');
+
 //get Server Certificates
 
 //Certificate Loader
@@ -80,13 +82,15 @@ export async function qsPullAndMapMasterItems (appid) {
                     let getDetails = async function() {
                         let msrObj = await app.getMeasure(measure.qInfo.qId);
                         let layout = await msrObj.getLayout();
+                        let version = await db.getMaxVersionForItem(appid, measure.qInfo.qId);
                         let returnObject = {
                             id:     layout.qInfo.qId,
                             label:  layout.qMeasure.qLabel,
                             def:    layout.qMeasure.qDef,
                             title:  layout.qMeta.title,
                             desc:   layout.qMeta.description,
-                            layout: layout
+                            layout: layout,
+                            version: version
                         };                                  
                         return returnObject;
                     }
@@ -105,13 +109,15 @@ export async function qsPullAndMapMasterItems (appid) {
                     let getDetails = async function () {
                         let dimObj = await app.getDimension(dimension.qInfo.qId);
                         let layout = await dimObj.getLayout();
+                        let version = await db.getMaxVersionForItem(appid, dimension.qInfo.qId);
                         let returnObject = {
                             id:     layout.qInfo.qId,
                             label:  layout.qDim.qFieldLabels[0],
                             def:    layout.qDim.qFieldDefs[0],
                             title:  layout.qMeta.title,
                             desc:   layout.qMeta.description,
-                            layout: layout
+                            layout: layout,
+                            version: version
                         };                                  
                         return returnObject;
                     }
