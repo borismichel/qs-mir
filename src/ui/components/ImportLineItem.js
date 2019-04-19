@@ -37,14 +37,17 @@ export class ImportLineItem extends Component {
             },
             body: JSON.stringify(object)
         }).then((r) => {
-            this.setState({imported: this.state.imported + " disabled"})
+            this.setState({imported: true})
         })
     }
 
     render(){
-        var buttonClass = (this.state.imported) ? "btn disabled":"btn btn-success";
-        var buttonText = (this.state.imported) ? "Imported":"Import to Repo";
+        var addButtonClass = (this.state.imported) ? "btn disabled":"btn btn-success";
+        var addButtonText = (this.state.imported) ? "Imported":"Import to Repo";
+        var upButtonClass = (this.state.imported||!this.state.version) ? "btn disabled":"btn btn-warning";
+        var upButtonText = (this.state.imported) ? "Imported":"Update current Version";
         var currentVersion = (this.state.version) ? "Prev. v" + this.state.version:'New Import';
+
         return (
             <tr>
                 <td>{this.state.line}</td>
@@ -53,12 +56,26 @@ export class ImportLineItem extends Component {
                 <td>{this.state.desc}</td>
                 <td><code>{this.state.def}</code></td>
                 <td>
-                    <input 
-                        class={buttonClass}
+                    <button 
+                        class={addButtonClass}
                         type="button"
+                        title={addButtonText}
                         onClick={(this.state.imported) ?'':() => {this.handleSend(this.state)}}
-                        value={buttonText}
-                    />
+                        value={addButtonText}
+                    >
+                     <i class="fas fa-download" />
+                    </button>
+                </td>
+                <td>
+                    <button 
+                        class={upButtonClass}
+                        type="button"
+                        title={upButtonText}
+                        onClick={(this.state.imported) ?'':() => {this.handleSend(this.state)}}
+                        value={upButtonText}
+                    >
+                     <i class="fas fa-arrow-alt-circle-up" />
+                    </button>
                 </td>
                 <td>{currentVersion}</td>
             </tr>

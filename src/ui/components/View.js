@@ -317,7 +317,7 @@ export class ExportLineItem extends Component {
                         title="Duplicate Item"
                         onClick={(this.state.edit) ? '':() => {this.handleSend(this.state.id, 'duplicate')}}
                     >
-                        <i class="fas fa-angle-double-right" />
+                        <i class="fas fa-clone" />
                     </button>
                 </td>
                 <td class="form-app-select">
