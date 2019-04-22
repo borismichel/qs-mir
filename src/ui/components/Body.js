@@ -58,7 +58,7 @@ export class Container extends React.Component {
             )
         } else {
             return (
-                <div className="container-fluid">
+                <div className="container-fluid" style={{width: "33%"}}>
                     <div className="panel panel-danger">
                         <div className="panel-heading">No Qlik Session Found!</div>
                         <div className="panel-body text-center">
