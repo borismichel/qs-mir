@@ -50,7 +50,7 @@ export class SavedItemsTable extends Component {
     }
 
     updateList() {
-        let uri = this.state.baseUrl + '/api/getstoreditems';
+        let uri = this.state.baseUrl + '/api/getlateststoreditems';
 
         fetch(uri)
         .then((response) => {
@@ -70,6 +70,7 @@ export class SavedItemsTable extends Component {
                             definition= {item.definition}
                             object=     {item.object}
                             line_id=    {item.id}
+                            version=    {item.version}
                             update=     {this.updateList}
                             apps=       {this.state.apps}
                         />
@@ -91,6 +92,7 @@ export class SavedItemsTable extends Component {
                             <tr>
                                 <th class="name">Name</th>
                                 <th class="description">Description</th>
+                                <th class="version">Version</th>
                                 <th class="type">Type</th>
                                 <th class="app">Original App</th>
                                 <th class="objectid">Object Id</th>
@@ -181,12 +183,14 @@ export class AppSelector extends Component {
                         {this.state.apps}
                 </select>
                 <span class="input-group-btn">
-                    <input
+                    <button
                         class={this.setBtnClass("btn btn-info")}
                         type="button"
-                        value="Export"
+                        title="Export to App"
                         onClick={(this.props.edit) ? '': () => {this.handleSend(this.state.id, 'export', this.state.object)}}
-                    />
+                    >
+                        <i class="fas fa-upload" />
+                    </button>
                 </span>
             </div>
         )
@@ -205,6 +209,7 @@ export class ExportLineItem extends Component {
             objectid: this.props.objectid,
             definition: this.props.definition,
             object: this.props.object,
+            version: this.props.version,
 
             edit: false,
 
@@ -283,6 +288,7 @@ export class ExportLineItem extends Component {
             <tr>
                 <td class="name"><b>{this.setTdOrInput('input', this.state.name)}</b></td>
                 <td class="description">{this.setTdOrInput('input',this.state.description)}</td>
+                <td class="version">{'v'+this.state.version}</td>
                 <td class="type">{this.state.type}</td>
                 <td class="app">{this.state.app}</td>
                 <td class="objectid">{this.state.objectid}</td>

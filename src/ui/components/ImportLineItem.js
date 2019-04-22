@@ -42,11 +42,9 @@ export class ImportLineItem extends Component {
     }
 
     render(){
-        var addButtonClass = (this.state.imported) ? "btn disabled":"btn btn-success";
-        var addButtonText = (this.state.imported) ? "Imported":"Import to Repo";
-        var upButtonClass = (this.state.imported||!this.state.version) ? "btn disabled":"btn btn-warning";
-        var upButtonText = (this.state.imported) ? "Imported":"Update current Version";
-        var currentVersion = (this.state.version) ? "Prev. v" + this.state.version:'New Import';
+        var ButtonClass = (this.state.imported) ? "btn disabled":(this.state.version) ? "btn btn-warning":"btn btn-success";
+        var ButtonText = (this.state.imported) ? "Imported":(this.state.version) ? "Update to v" + this.state.version + 1:"Import to Repo";
+        var symbol = (this.state.version) ? "fas fa-arrow-alt-circle-up":"fas fa-download"
 
         return (
             <tr>
@@ -57,27 +55,15 @@ export class ImportLineItem extends Component {
                 <td><code>{this.state.def}</code></td>
                 <td>
                     <button 
-                        class={addButtonClass}
+                        class={ButtonClass}
                         type="button"
-                        title={addButtonText}
+                        title={ButtonText}
                         onClick={(this.state.imported) ?'':() => {this.handleSend(this.state)}}
-                        value={addButtonText}
+                        value={ButtonText}
                     >
-                     <i class="fas fa-download" />
+                     <i class={symbol} />
                     </button>
                 </td>
-                <td>
-                    <button 
-                        class={upButtonClass}
-                        type="button"
-                        title={upButtonText}
-                        onClick={(this.state.imported) ?'':() => {this.handleSend(this.state)}}
-                        value={upButtonText}
-                    >
-                     <i class="fas fa-arrow-alt-circle-up" />
-                    </button>
-                </td>
-                <td>{currentVersion}</td>
             </tr>
         )
     }
