@@ -134,7 +134,7 @@ export async function qsPullAndMapMasterItems (appid) {
         return result;
 
     } catch(error) {
-        console.error(error)
+        console.error('qsPammi:',error)
     }
 };
 
