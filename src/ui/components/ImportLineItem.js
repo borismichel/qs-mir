@@ -43,7 +43,7 @@ export class ImportLineItem extends Component {
 
     render(){
         var ButtonClass = (this.state.imported) ? "btn disabled":(this.state.version) ? "btn btn-warning":"btn btn-success";
-        var ButtonText = (this.state.imported) ? "Imported":(this.state.version) ? "Update to v" + this.state.version + 1:"Import to Repo";
+        var ButtonText = (this.state.imported) ? "Imported":(this.state.version) ? "Update to v" + (this.state.version + 1):"Import to Repo";
         var symbol = (this.state.version) ? "fas fa-arrow-alt-circle-up":"fas fa-download"
 
         return (
@@ -55,27 +55,15 @@ export class ImportLineItem extends Component {
                 <td><code>{this.state.def}</code></td>
                 <td>
                     <button 
-                        className={addButtonClass}
+                        className={ButtonClass}
                         type="button"
                         title={ButtonText}
-                        onClick={(this.state.imported) ?'':() => {this.handleSend(this.state)}}
+                        onClick={(this.state.imported) ?() => '':() => {this.handleSend(this.state)}}
                         value={ButtonText}
                     >
-                     <i className="fas fa-download" />
+                     <i className={symbol} />
                     </button>
                 </td>
-                <td>
-                    <button 
-                        className={upButtonClass}
-                        type="button"
-                        title={upButtonText}
-                        onClick={(this.state.imported) ?'':() => {this.handleSend(this.state)}}
-                        value={upButtonText}
-                    >
-                     <i className="fas fa-arrow-alt-circle-up" />
-                    </button>
-                </td>
-                <td>{currentVersion}</td>
             </tr>
         )
     }

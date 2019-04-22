@@ -175,7 +175,7 @@ export class AppSelector extends Component {
                         title="Export to App"
                         onClick={(this.props.edit) ? '': () => {this.handleSend(this.state.id, 'export', this.state.object)}}
                     >
-                        <i class="fas fa-upload" />
+                        <i className="fas fa-upload" />
                     </button>
                 </span>
             </div>
