@@ -16,9 +16,32 @@ const db = require('../db/db');
 // session.on('traffic:sent', data => console.log('sent:', data));
 // session.on('traffic:received', data => console.log('received:', data));
 
-export async function qsPullMasterItems (appid) {
 
-    const session = await enigma.create({
+
+export async function qsQlikAlive() {
+    try {        
+        const session = enigma.create({
+            schema,
+            url: config.qlikServer,
+            createSocket: url => new webSocket(url,{
+                // ca: root, < Uncomment when on Server
+                // key: key, < Uncomment when on Server
+                // cert: client, < Uncomment when on Server
+                headers: {
+                    'X-Qlik-User': config.qlikUser
+                },
+            })
+        });
+        console.log(await session.open());
+        await session.close();
+        return {status: 'Success'}
+    } catch {
+        return {status: 'Failed'}
+    }
+}
+
+export async function qsPullMasterItems (appid) {
+    const session = enigma.create({
         schema,
         url: config.qlikServer,
         createSocket: url => new webSocket(url,{
@@ -56,8 +79,9 @@ export async function qsPullMasterItems (appid) {
 };
 
 export async function qsPullAndMapMasterItems (appid) {
+
     try {
-        const session = await enigma.create({
+        const session = enigma.create({
             schema,
             url: config.qlikServer,
             createSocket: url => new webSocket(url,{
@@ -139,7 +163,9 @@ export async function qsPullAndMapMasterItems (appid) {
 };
 
 export async function qsGetDocList() {
-    const session = await enigma.create({
+
+    try {
+        const session = enigma.create({
         schema,
         url: config.qlikServer,
         createSocket: url => new webSocket(url,{
@@ -151,27 +177,16 @@ export async function qsGetDocList() {
             },
         })
     });
-
-    let global = await session.open();
-    let list = await global.getDocList()
-    session.close();
-    return list;
+        let global = await session.open();
+        let list = await global.getDocList()
+        session.close();
+        return list;
+    } catch {
+        return "No Qlik Session Found"
+    }
 }
 
 export async function qsDeployMasterItem(appid, object) {
-    const session = await enigma.create({
-        schema,
-        url: config.qlikServer,
-        createSocket: url => new webSocket(url,{
-            // ca: root, < Uncomment when on Server
-            // key: key, < Uncomment when on Server
-            // cert: client, < Uncomment when on Server
-            headers: {
-                'X-Qlik-User': config.qlikUser
-            },
-        })
-    });
-
     const global = await session.open();
     const app = await global.openDoc(appid);
 

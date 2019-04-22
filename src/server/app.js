@@ -73,6 +73,14 @@ app.post('/api/editobject', async (req,res) => {
     console.log('API completed Master Item Object for Editing');
 })
 
+app.get('/api/qlikalive', async (req,res) => {
+    console.log('API Checking Qlik Session Status');
+    let status = await qs.qsQlikAlive();
+    console.log('API Qlik Session Status:', status.status);
+    res.send(status);
+    res.end();
+})
+
 app.post('/submit', (req, res) => {
     res.send('you posted:\n');
     res.end(JSON.stringify(req.body, null, 2));
