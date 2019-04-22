@@ -57,24 +57,24 @@ export class ImportLineItem extends Component {
                 <td><code>{this.state.def}</code></td>
                 <td>
                     <button 
-                        class={addButtonClass}
+                        className={addButtonClass}
                         type="button"
                         title={addButtonText}
                         onClick={(this.state.imported) ?'':() => {this.handleSend(this.state)}}
                         value={addButtonText}
                     >
-                     <i class="fas fa-download" />
+                     <i className="fas fa-download" />
                     </button>
                 </td>
                 <td>
                     <button 
-                        class={upButtonClass}
+                        className={upButtonClass}
                         type="button"
                         title={upButtonText}
                         onClick={(this.state.imported) ?'':() => {this.handleSend(this.state)}}
                         value={upButtonText}
                     >
-                     <i class="fas fa-arrow-alt-circle-up" />
+                     <i className="fas fa-arrow-alt-circle-up" />
                     </button>
                 </td>
                 <td>{currentVersion}</td>
