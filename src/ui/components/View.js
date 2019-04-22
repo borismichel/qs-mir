@@ -52,7 +52,7 @@ export class SavedItemsTable extends Component {
     }
 
     updateList() {
-        let uri = this.state.baseUrl + '/api/getstoreditems';
+        let uri = this.state.baseUrl + '/api/getlateststoreditems';
 
         fetch(uri)
         .then((response) => {
@@ -72,6 +72,7 @@ export class SavedItemsTable extends Component {
                             definition= {item.definition}
                             object=     {item.object}
                             line_id=    {item.id}
+                            version=    {item.version}
                             update=     {this.updateList}
                             apps=       {this.state.apps}
                             line=       {idx}
@@ -168,12 +169,14 @@ export class AppSelector extends Component {
                         {this.state.apps}
                 </select>
                 <span className="input-group-btn">
-                    <input
+                    <button
                         className={this.setBtnClass("btn btn-info")}
                         type="button"
-                        value="Export"
+                        title="Export to App"
                         onClick={(this.props.edit) ? '': () => {this.handleSend(this.state.id, 'export', this.state.object)}}
-                    />
+                    >
+                        <i class="fas fa-upload" />
+                    </button>
                 </span>
             </div>
         )

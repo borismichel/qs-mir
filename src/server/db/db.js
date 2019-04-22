@@ -28,8 +28,8 @@ export async function editMasterItem(id, method, object, app) {
 
         case 'duplicate':
         sql = 'INSERT INTO \
-                    items (type, object, app, version, name, label, description, definition) \
-                        SELECT type, object, app, version, name, label, description, definition \
+                    items (type, object, app, version, name, label, description, definition, objectid) \
+                        SELECT type, object, app, version+1, name, label, description, definition, objectid \
                         FROM items WHERE id = ' + id + ';';
         db.run(sql);
         res = "200 - SUCCESS";
@@ -45,6 +45,31 @@ export async function editMasterItem(id, method, object, app) {
 
 export async function getStoredItems() {
     let sql = 'SELECT * FROM items';
+    return new Promise((resolve, reject) => {
+        db.all(sql, function(err, items) {
+            if(err) {console.error(err)};
+            resolve(items);
+        })
+    })
+}
+
+export async function getLatestStoredItems() {
+    let sql = 'SELECT \
+                id, \
+                type, \
+                object, \
+                app, \
+                version, \
+                name, \
+                label, \
+                description, \
+                definition, \
+                objectid \
+            FROM items \
+            INNER JOIN  \
+            (SELECT app as joinApp, objectid as joinOid, max(Version) as max FROM items GROUP BY joinApp, joinOid)  \
+            ON app = joinApp AND objectid = joinOid  AND version = max \
+            ;';
     return new Promise((resolve, reject) => {
         db.all(sql, function(err, items) {
             if(err) {console.error(err)};

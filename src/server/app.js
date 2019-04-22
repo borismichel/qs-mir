@@ -40,6 +40,12 @@ app.get('/api/getstoreditems', async (req, res) => {
     res.end();
 })
 
+app.get('/api/getlateststoreditems', async (req, res) => {
+    let rows = await db.getLatestStoredItems();
+    res.send(rows)
+    res.end();
+})
+
 app.get('/test', (req,res) => {
     let appid = "C:\\Users\\Boris Michel\\Documents\\Qlik\\Sense\\Apps\\Consumer Sales.qvf" //req.body.app;
     console.log('API', 'Sending Master Items')
