@@ -9,7 +9,7 @@ class App extends Component {
         return (
             <div>
                 <h1>QS MIR</h1>
-                <Body.container />
+                <Body.Container />
             </div>
         );
     }

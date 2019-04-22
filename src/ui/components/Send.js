@@ -105,28 +105,28 @@ export class ItemTable extends Component {
         return (
             <div>
                 <h2>Measures</h2>
-                <table class="table table-striped">
+                <table className="table table-striped">
                     <tbody>
                         <tr>
-                            <th class="id">#</th>
-                            <th class="title">Name</th>
-                            <th class="title">Label</th>
-                            <th class="title">Description</th>
-                            <th class="long">Definition</th>
+                            <th className="id">#</th>
+                            <th className="title">Name</th>
+                            <th className="title">Label</th>
+                            <th className="title">Description</th>
+                            <th className="long">Definition</th>
                             <th></th>
                         </tr>
                         {this.state.measures}
                     </tbody>
                 </table>
                 <h2>Dimensions</h2>
-                <table class="table table-striped">
+                <table className="table table-striped">
                     <tbody>
                         <tr>
-                            <th class="id">#</th>
-                            <th class="title">Name</th>
-                            <th class="title">Label</th>
-                            <th class="title">Description</th>
-                            <th class="long">Definition</th>
+                            <th className="id">#</th>
+                            <th className="title">Name</th>
+                            <th className="title">Label</th>
+                            <th className="title">Description</th>
+                            <th className="long">Definition</th>
                             <th></th>
                         </tr>
                         {this.state.dimensions}
@@ -196,20 +196,20 @@ export class AppLoader extends Component {
     render() {
         console.log(this.state);
         return(
-            <div class="panel panel-default">
-                <div class="panel-heading">Select an App to View Master Items</div>    
-                <div class="panel-body">
-                    <div class="input-group app-select">
+            <div className="panel panel-default">
+                <div className="panel-heading">Select an App to View Master Items</div>    
+                <div className="panel-body">
+                    <div className="input-group app-select">
                         <select 
-                            class="form-control"
+                            className="form-control"
                             value={this.state.value} 
                             onChange={this.handleChange}>
                             <option value=''>&lt;Select App&gt;</option>
                             {this.state.apps}
                         </select>
-                        <span class="input-group-btn">
+                        <span className="input-group-btn">
                             <input 
-                                class="btn btn-success"
+                                className="btn btn-success"
                                 type="button"
                                 value="Load"
                                 onClick={this.loadAppData}

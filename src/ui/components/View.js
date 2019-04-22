@@ -81,24 +81,24 @@ export class SavedItemsTable extends Component {
     
     render(){
         return (
-            <div class="panel panel-default">
-                <div class="panel-heading">
+            <div className="panel panel-default">
+                <div className="panel-heading">
                     Saved Items
                 </div>
-                <div class="panel-body">
-                    <table class="table table-striped">
+                <div className="panel-body">
+                    <table className="table table-striped">
                         <tbody>
                             <tr>
-                                <th class="name">Name</th>
-                                <th class="description">Description</th>
-                                <th class="type">Type</th>
-                                <th class="app">Original App</th>
-                                <th class="objectid">Object Id</th>
-                                <th class="definition">Definition</th>
-                                <th class="single-button"></th>
-                                <th class="single-button"></th>
-                                <th class="single-button"></th>
-                                <th class="form-app-select"></th>
+                                <th className="name">Name</th>
+                                <th className="description">Description</th>
+                                <th className="type">Type</th>
+                                <th className="app">Original App</th>
+                                <th className="objectid">Object Id</th>
+                                <th className="definition">Definition</th>
+                                <th className="single-button"></th>
+                                <th className="single-button"></th>
+                                <th className="single-button"></th>
+                                <th className="form-app-select"></th>
                             </tr>
                             {this.state.items}
                         </tbody>
@@ -172,17 +172,17 @@ export class AppSelector extends Component {
 
     render() {
         return(
-            <div class="input-group">         
-                <select class={this.setBtnClass("form-control")}
+            <div className="input-group">         
+                <select className={this.setBtnClass("form-control")}
                     value={this.state.value} 
                     onChange={this.handleChange}
                     >
                         <option value=''>App</option>
                         {this.state.apps}
                 </select>
-                <span class="input-group-btn">
+                <span className="input-group-btn">
                     <input
-                        class={this.setBtnClass("btn btn-info")}
+                        className={this.setBtnClass("btn btn-info")}
                         type="button"
                         value="Export"
                         onClick={(this.props.edit) ? '': () => {this.handleSend(this.state.id, 'export', this.state.object)}}
@@ -281,46 +281,46 @@ export class ExportLineItem extends Component {
     render() {
         return (
             <tr>
-                <td class="name"><b>{this.setTdOrInput('input', this.state.name)}</b></td>
-                <td class="description">{this.setTdOrInput('input',this.state.description)}</td>
-                <td class="type">{this.state.type}</td>
-                <td class="app">{this.state.app}</td>
-                <td class="objectid">{this.state.objectid}</td>
-                <td class="definition"><code>{this.setTdOrInput('textarea', this.state.definition)}</code></td>
-                <td class="single-button">
+                <td className="name"><b>{this.setTdOrInput('input', this.state.name)}</b></td>
+                <td className="description">{this.setTdOrInput('input',this.state.description)}</td>
+                <td className="type">{this.state.type}</td>
+                <td className="app">{this.state.app}</td>
+                <td className="objectid">{this.state.objectid}</td>
+                <td className="definition"><code>{this.setTdOrInput('textarea', this.state.definition)}</code></td>
+                <td className="single-button">
                     <button
-                        class={this.toggleBtnClass()}
+                        className={this.toggleBtnClass()}
                         type="button"
                         value="X"
                         title="Edit Item"
                         onClick={this.handleEdit}
                     >
-                        <i class="fas fa-pencil-alt" />
+                        <i className="fas fa-pencil-alt" />
                     </button>
                 </td>
-                <td class="single-button">
+                <td className="single-button">
                     <button
-                        class={this.setBtnClass("btn btn-danger")}
+                        className={this.setBtnClass("btn btn-danger")}
                         type="button"
                         value="X"
                         title="Delete Item"
                         onClick={(this.state.edit) ? '':() =>{this.handleSend(this.state.id, 'delete')}}
                     >
-                        <i class="fas fa-trash-alt" />
+                        <i className="fas fa-trash-alt" />
                     </button>
                 </td>
-                <td class="single-button">
+                <td className="single-button">
                     <button
-                        class={this.setBtnClass("btn btn-warning")}
+                        className={this.setBtnClass("btn btn-warning")}
                         type="button"
                         value="x2"
                         title="Duplicate Item"
                         onClick={(this.state.edit) ? '':() => {this.handleSend(this.state.id, 'duplicate')}}
                     >
-                        <i class="fas fa-clone" />
+                        <i className="fas fa-clone" />
                     </button>
                 </td>
-                <td class="form-app-select">
+                <td className="form-app-select">
                     <AppSelector 
                         object={this.state.object}
                         id={this.state.id}
