@@ -10,6 +10,7 @@ export class ItemTable extends Component {
             measures: [],
             dimensions: [],
             app: '',
+            app_name: '',
             baseUrl: ''
         }
         
@@ -25,7 +26,8 @@ export class ItemTable extends Component {
     componentWillReceiveProps(newProps) {
         let fetchNew = newProps.app!==this.state.app; //If I knew what I was doing, this would be redundant?!
         this.setState({
-            app: newProps.app
+            app: newProps.app,
+            app_name: newProps.app_name
         }, () =>  {
             if (fetchNew) {
                 this.setState({
@@ -65,6 +67,7 @@ export class ItemTable extends Component {
                     <ImportLineItem 
                         type=   'measure'
                         app=    {this.state.app}
+                        app_name={this.state.app_name}
                         layout= {msrObj.layout}
                         title=  {msrObj.title}
                         label=  {msrObj.label}
@@ -82,6 +85,7 @@ export class ItemTable extends Component {
                     <ImportLineItem 
                         type=   'dimension'
                         app=    {this.state.app}
+                        app_name={this.state.app_name}
                         layout= {dimObj.layout}
                         title=  {dimObj.title}
                         label=  {dimObj.label}
@@ -144,8 +148,10 @@ export class AppLoader extends Component {
 
         this.state = {
             app: '',
+            app_name: '',
             apps: [],
             selected_app: '',
+            selected_name: '',
             value: '<Select App>'
         }
         this.handleChange = this.handleChange.bind(this);
@@ -165,7 +171,7 @@ export class AppLoader extends Component {
         .then((apps) => {
             return apps.map((app, idx) => {
                 return (
-                    <option key={idx} value={app.qDocId}>{app.qDocName}</option>
+                    <option key={idx} text={app.qDocName} value={app.qDocId + '#####' + app.qDocName}>{app.qDocName}</option>
                 )
             })
         })
@@ -181,15 +187,18 @@ export class AppLoader extends Component {
     }
 
     handleChange(event){
+        console.log('event', event.target)
         this.setState({
-            selected_app: event.target.value,
+            selected_app: event.target.value.split('#####' )[0],            
+            selected_name: event.target.value.split('#####' )[1],
             value: event.target.text
         })
     }
 
     loadAppData(){
         this.setState({
-            app: this.state.selected_app
+            app: this.state.selected_app,
+            app_name: this.state.selected_name
         })
     }
 
@@ -199,7 +208,7 @@ export class AppLoader extends Component {
             <div className="panel panel-default">
                 <div className="panel-heading">Select an App to View Master Items</div>    
                 <div className="panel-body">
-                    <div className="input-group app-select">
+                    <div className="input-group app-select" style={{textAlign:  'center'}}>
                         <select 
                             className="form-control"
                             value={this.state.value} 
@@ -216,7 +225,10 @@ export class AppLoader extends Component {
                             />
                         </span>
                     </div>
-                    <ItemTable app={this.state.app} />
+                    <ItemTable 
+                        app={this.state.app} 
+                        app_name={this.state.app_name} 
+                    />
                 </div>
             </div>
         )

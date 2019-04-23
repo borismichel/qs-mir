@@ -18,6 +18,7 @@ export class ImportLineItem extends Component {
             line:   this.props.line,
             baseUrl: this.props.url,
             version: this.props.version,
+            appName: this.props.app_name,
             imported: false
         }
 

@@ -11,10 +11,13 @@ export class ExportLineItem extends Component {
             name: this.props.name,
             type: this.props.type,
             app: this.props.app,
+            appname: this.props.appname,
             objectid: this.props.objectid,
             definition: this.props.definition,
             object: this.props.object,
             line: this.props.line,
+            version: this.props.version,
+            allv: this.props.allversions,
             open: false,
 
             edit: false,
@@ -32,6 +35,21 @@ export class ExportLineItem extends Component {
         uri += (window.location.port.length > 0) ? (':' + window.location.port):'';
 
         this.setState({baseUrl: uri});
+    }
+
+    componentWillMount() {
+        //Populate list
+        let versionList = this.state.allv.map((obj, idx) => {
+            return(
+                <tr>
+                    <td>{obj.version}</td>
+                    <td>{obj.name}</td>
+                    <td>{obj.label}</td>
+                    <td>{obj.definition}</td>
+                </tr>
+            )
+        })
+        this.setState({allv: versionList})
     }
     
     shouldComponentUpdate(){
@@ -105,9 +123,10 @@ export class ExportLineItem extends Component {
                                 </b>
                             </a>
                         </td>
+                        <td className="type">current: v{this.state.version}</td>
                         {/* <td className="description">{this.setTdOrInput('input',this.state.description)}</td> */}
                         <td className="type">{this.state.type}</td>
-                        <td className="app">{this.state.app}</td>
+                        <td className="app">{this.state.appname}</td>
                         {/* <td className="objectid">{this.state.objectid}</td> */}
                         {/* <td className="definition"><code>{this.setTdOrInput('textarea', this.state.definition)}</code></td> */}
                         <td className="single-button">
@@ -155,10 +174,18 @@ export class ExportLineItem extends Component {
                 </div>
                 <Collapse in={this.state.open}>
                     <div id={'item' + this.state.line}>
-                        <div className="panel-body">Lorem ipsum dolor sit amet, consectetur adipisicing elit,
-                        sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
-                        minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-                        commodo consequat.
+                        <div className="panel-body">
+                            <table className="table">
+                                <tbody>
+                                    <tr>
+                                        <th>Version</th>
+                                        <th>Name</th>
+                                        <th>Label</th>
+                                        <th>Definition</th>
+                                    </tr>
+                                    {this.state.allv}
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </Collapse>
@@ -166,3 +193,5 @@ export class ExportLineItem extends Component {
         )
     }
 }
+
+// function 

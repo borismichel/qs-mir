@@ -46,6 +46,12 @@ app.get('/api/getlateststoreditems', async (req, res) => {
     res.end();
 })
 
+app.get('/api/getstoreditemsfortable', async (req, res) => {
+    let rows = await db.mapStoredObjects();
+    res.send(rows)
+    res.end();
+})
+
 app.get('/test', (req,res) => {
     let appid = "C:\\Users\\Boris Michel\\Documents\\Qlik\\Sense\\Apps\\Consumer Sales.qvf" //req.body.app;
     console.log('API', 'Sending Master Items')
@@ -57,8 +63,8 @@ app.get('/test', (req,res) => {
 })
 
 app.post('/api/storeobject', async (req,res) => {
-    console.log('API received Master Item Object for Storage');
-    let store = await db.storeMasterItem(req.body.type, req.body.app, req.body.layout, req.body.title, req.body.label, req.body.desc, req.body.def, req.body.id, req.body.version);
+    console.log('API received Master Item Object for Storage', req.body);
+    let store = await db.storeMasterItem(req.body.type, req.body.app, req.body.layout, req.body.title, req.body.label, req.body.desc, req.body.def, req.body.id, req.body.version, req.body.appName);
     res.send('Received, Carry on.');
     res.end();
     console.log('API completed Master Item Object for Storage');

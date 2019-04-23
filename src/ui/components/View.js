@@ -52,7 +52,7 @@ export class SavedItemsTable extends Component {
     }
 
     updateList() {
-        let uri = this.state.baseUrl + '/api/getlateststoreditems';
+        let uri = this.state.baseUrl + '/api/getstoreditemsfortable';
 
         fetch(uri)
         .then((response) => {
@@ -68,11 +68,13 @@ export class SavedItemsTable extends Component {
                             description={item.description}
                             type=       {item.type}
                             app=        {item.app}
+                            appname=    {item.appname}
                             objectid=   {item.objectid}
                             definition= {item.definition}
                             object=     {item.object}
                             line_id=    {item.id}
                             version=    {item.version}
+                            allversions={item.allVersions}
                             update=     {this.updateList}
                             apps=       {this.state.apps}
                             line=       {idx}
