@@ -41,7 +41,7 @@ export class Container extends React.Component {
         let buttonText = (!this.state.showView) ? 'Show Master Item Repository':'Browse Apps for Master Items';
         if(this.state.qlikAlive){
             return (
-                <div className="container-fluid">
+                <div className="container">
                     <div className="panel panel-default">
                     <div className="panel-heading">Toggle Export Import</div>
                     <div className="panel-body text-center">

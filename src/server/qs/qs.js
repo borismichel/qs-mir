@@ -3,35 +3,51 @@ const config = require('../config/config');
 const enigma  = require('enigma.js');
 const schema  = require('enigma.js/schemas/12.34.11.json');
 const webSocket = require('ws');
+const fs        =require('fs');
 
 const db = require('../db/db');
 
 //get Server Certificates
 
 //Certificate Loader
-// const root  = [fs.readFileSync((config.qlikCertificateDir + 'root.pem'))];
-// const key   = fs.readFileSync((config.qlikCertificateDir + 'client_key.pem'));
-// const client = fs.readFileSync((config.qlikCertificateDir + 'client.pem'));
+const root      = (config.qlikIsSrv) ? [fs.readFileSync((config.qlikCertificateDir + 'root.pem'))]:'';
+const key       = (config.qlikIsSrv) ? fs.readFileSync((config.qlikCertificateDir + 'client_key.pem')):'';
+const client    = (config.qlikIsSrv) ? fs.readFileSync((config.qlikCertificateDir + 'client.pem')):'';
 
 // session.on('traffic:sent', data => console.log('sent:', data));
 // session.on('traffic:received', data => console.log('received:', data));
 
 
-
-export async function qsQlikAlive() {
-    try {        
-        const session = enigma.create({
+export async function buildProps(isSrv) {
+    if (isSrv) {
+        return {
             schema,
             url: config.qlikServer,
             createSocket: url => new webSocket(url,{
-                // ca: root, < Uncomment when on Server
-                // key: key, < Uncomment when on Server
-                // cert: client, < Uncomment when on Server
+                ca: root, //< Uncomment when on Server
+                key: key, //< Uncomment when on Server
+                cert: client, //< Uncomment when on Server
                 headers: {
                     'X-Qlik-User': config.qlikUser
                 },
             })
-        });
+        }
+    } else {
+        return {
+            schema,
+            url: config.qlikServer,
+            createSocket: url => new webSocket(url,{
+                headers: {
+                    'X-Qlik-User': 'UserDirectory= INTERNAL;UserId= SA_API'
+                },
+            })
+        }
+    }
+}
+
+export async function qsQlikAlive() {
+    try {        
+        const session = enigma.create(await buildProps(config.qlikIsSrv));
         console.log(await session.open());
         await session.close();
         return {status: 'Success'}
@@ -81,19 +97,8 @@ export async function qsPullMasterItems (appid) {
 export async function qsPullAndMapMasterItems (appid) {
 
     try {
-        const session = enigma.create({
-            schema,
-            url: config.qlikServer,
-            createSocket: url => new webSocket(url,{
-                // ca: root, < Uncomment when on Server
-                // key: key, < Uncomment when on Server
-                // cert: client, < Uncomment when on Server
-                headers: {
-                    'X-Qlik-User': config.qlikUser
-                },
-            })
-        });
 
+        const session = enigma.create(await buildProps(config.qlikIsSrv));
         const global = await session.open();
         const app = await global.openDoc(appid);
         //Get Measures
@@ -165,18 +170,8 @@ export async function qsPullAndMapMasterItems (appid) {
 export async function qsGetDocList() {
 
     try {
-        const session = enigma.create({
-            schema,
-            url: config.qlikServer,
-            createSocket: url => new webSocket(url,{
-                // ca: root, < Uncomment when on Server
-                // key: key, < Uncomment when on Server
-                // cert: client, < Uncomment when on Server
-                headers: {
-                    'X-Qlik-User': config.qlikUser
-                },
-            })
-        });
+
+        const session = enigma.create(await buildProps(config.qlikIsSrv));
         let global = await session.open();
         let list = await global.getDocList()
         session.close();
@@ -188,18 +183,8 @@ export async function qsGetDocList() {
 
 export async function qsDeployMasterItem(appid, object) {
     try {
-        const session = enigma.create({
-            schema,
-            url: config.qlikServer,
-            createSocket: url => new webSocket(url,{
-                // ca: root, < Uncomment when on Server
-                // key: key, < Uncomment when on Server
-                // cert: client, < Uncomment when on Server
-                headers: {
-                    'X-Qlik-User': config.qlikUser
-                },
-            })
-        });
+
+        const session = enigma.create(await buildProps(config.qlikIsSrv));
         const global = await session.open();
         const app = await global.openDoc(appid);
 

@@ -111,8 +111,8 @@ export class ItemTable extends Component {
                             <th className="id">#</th>
                             <th className="title">Name</th>
                             <th className="title">Label</th>
-                            <th className="title">Description</th>
-                            <th className="long">Definition</th>
+                            <th className="title">Description</th> 
+                            {/* {/* <th className="long">Definition</th> */}
                             <th></th>
                         </tr>
                         {this.state.measures}
@@ -126,7 +126,7 @@ export class ItemTable extends Component {
                             <th className="title">Name</th>
                             <th className="title">Label</th>
                             <th className="title">Description</th>
-                            <th className="long">Definition</th>
+                            {/* <th className="long">Definition</th>  */}
                             <th></th>
                         </tr>
                         {this.state.dimensions}

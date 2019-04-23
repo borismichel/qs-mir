@@ -52,7 +52,7 @@ export class ImportLineItem extends Component {
                 <td>{this.state.title}</td>
                 <td>{this.state.label}</td>
                 <td>{this.state.desc}</td>
-                <td><code>{this.state.def}</code></td>
+                {/* <td><code>{this.state.def}</code></td> */}
                 <td>
                     <button 
                         className={ButtonClass}
