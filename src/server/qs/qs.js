@@ -14,6 +14,8 @@ const root      = (config.qlikIsSrv) ? [fs.readFileSync((config.qlikCertificateD
 const key       = (config.qlikIsSrv) ? fs.readFileSync((config.qlikCertificateDir + 'client_key.pem')):'';
 const client    = (config.qlikIsSrv) ? fs.readFileSync((config.qlikCertificateDir + 'client.pem')):'';
 
+process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = 0; //Self Signed Cert by QS prob
+
 // session.on('traffic:sent', data => console.log('sent:', data));
 // session.on('traffic:received', data => console.log('received:', data));
 
@@ -51,7 +53,8 @@ export async function qsQlikAlive() {
         console.log(await session.open());
         await session.close();
         return {status: 'Success'}
-    } catch {
+    } catch(err) {
+        console.error(err);
         return {status: 'Failed'}
     }
 }
