@@ -50,7 +50,7 @@ export class ImportLineItem extends Component {
         return (
             <tr>
                 <td>{this.state.line}</td>
-                <td>{this.state.title}</td>
+                <td title={this.state.def}>{this.state.title}</td>
                 <td>{this.state.label}</td>
                 <td>{this.state.desc}</td>
                 {/* <td><code>{this.state.def}</code></td> */}

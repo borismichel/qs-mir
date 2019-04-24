@@ -194,4 +194,22 @@ export class ExportLineItem extends Component {
     }
 }
 
-// function 
+function itemCollape(props) {
+    <Collapse in={props.open}>
+        <div id={'item' + props.line}>
+            <div className="panel-body">
+            <table className="table">
+                <tbody>
+                    <tr>
+                        <th>Version</th>
+                        <th>Name</th>
+                        <th>Label</th>
+                        <th>Definition</th>
+                    </tr>
+                    {props.allv}
+                </tbody>
+            </table>
+            </div>
+        </div>
+    </Collapse>
+}
