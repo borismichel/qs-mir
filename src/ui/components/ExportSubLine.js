@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import {AppSelector} from './View'
 import Modal from 'react-modal';
+import { generateKeyPair } from "crypto";
 
 //Modal Settings for Editing Master Items
 
@@ -124,34 +125,40 @@ export class ExportSubLine extends Component {
                     isOpen={this.state.modal}
                     style={{overlay: modalOverlayStyle, content: modalContentStyle}}
                 >
-                    <h2>Edit <b>{this.state.name}</b></h2>
-                    <h4>Version {this.state.version}</h4>
-                    <table className="table"><tbody>
-                    <tr>
-                        <td style={{textAlign: 'right'}}><b>Name</b></td>
-                        <td><input className="form-control" value={this.state.name} /></td>
-                    </tr>
-                    <tr>
-                        <td style={{textAlign: 'right'}}><b>Label</b></td>
-                        <td><input className="form-control" value={this.state.label} /></td>
-                    </tr>
-                    <tr>
-                        <td style={{textAlign: 'right'}}><b>Description</b></td>
-                        <td><textarea className="form-control" cols="50" rows="5" >{this.state.description}</textarea></td>
-                    </tr>
-                    <tr>
-                        <td style={{textAlign: 'right'}}><b>Definition</b></td>
-                        <td><code><textarea className="form-control" cols="50" rows="15" >{this.state.definition}</textarea></code></td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td style={{textAlign:'center'}}>
-                            <button className="btn btn-success" onClick={() => this.setState({modal: false})}><i class="fas fa-check"></i></button> 
-                            <span>     </span>                                            
-                            <button className="btn btn-danger" onClick={() => this.setState({modal: false})}><i class="fas fa-times"></i></button>
-                        </td>
-                    </tr>
-                    </tbody></table>   
+                    <div style={{   margin:10, 
+                                    padding:20, 
+                                    border: 'solid', 
+                                    borderWidth: 1, 
+                                    borderColor: 'lightgrey', 
+                                    borderRadius: 5,
+                                    textAlign: 'center'
+                                }}
+                    >
+                        <h2>Edit <b>{this.state.name}</b></h2>
+                        <h4>Version {this.state.version}</h4>
+                        <table className="table"><tbody>
+                        <tr>
+                            <td style={{textAlign: 'right'}}><b>Name</b></td>
+                            <td><input className="form-control" value={this.state.name} /></td>
+                        </tr>
+                        <tr>
+                            <td style={{textAlign: 'right'}}><b>Label</b></td>
+                            <td><input className="form-control" value={this.state.label} /></td>
+                        </tr>
+                        <tr>
+                            <td style={{textAlign: 'right'}}><b>Description</b></td>
+                            <td><textarea className="form-control" cols="50" rows="5" >{this.state.description}</textarea></td>
+                        </tr>
+                        <tr>
+                            <td style={{textAlign: 'right'}}><b>Definition</b></td>
+                            <td><code><textarea className="form-control" cols="50" rows="15" >{this.state.definition}</textarea></code></td>
+                        </tr>
+                        </tbody></table>   
+                        
+                        <button className="btn btn-success" onClick={() => this.setState({modal: false})}><i class="fas fa-check"></i> Save</button> 
+                        <span>     </span>                                            
+                        <button className="btn btn-danger" onClick={() => this.setState({modal: false})}><i class="fas fa-times"></i> Discard</button>
+                    </div>
                 </Modal>
             </tr>
         )
