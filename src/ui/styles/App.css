@@ -38,7 +38,7 @@ td.name, th.name {
 }
 
 td.description, th.description {
-    width: 30%;
+    width: 15%;
 }
 
 td.type, th.type {
@@ -55,7 +55,7 @@ td.objectid, th.objectid {
 
 
 td.definition, th.definition {
-    width: 25%;
+    width: 35%;
 }
 
 td.single-button, th.single-button {

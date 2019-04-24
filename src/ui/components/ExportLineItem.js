@@ -15,6 +15,7 @@ export class ExportLineItem extends Component {
             appname: this.props.appname,
             objectid: this.props.objectid,
             definition: this.props.definition,
+            description: this.props.description,
             object: this.props.object,
             line: this.props.line,
             version: this.props.version,
@@ -44,6 +45,7 @@ export class ExportLineItem extends Component {
                     name= {obj.name}
                     label= {obj.label}
                     definition= {obj.definition}
+                    description= {obj.description}
                     object= {obj.object}
                     id= {obj.id}                    
                     apps={this.props.apps}
@@ -127,10 +129,14 @@ export class ExportLineItem extends Component {
                             <table className="table">
                                 <tbody>
                                     <tr>
-                                        <th></th>
-                                        <th>Name</th>
-                                        <th>Label</th>
-                                        <th>Definition</th>
+                                        <th className="id"></th>
+                                        <th className="name">Name</th>
+                                        <th className="name">Label</th>
+                                        <th className="description">Description</th>
+                                        <th className="definition">Definition</th>
+                                        <th>Edit</th>
+                                        <th>Delete</th>
+                                        <th>Export</th>
                                     </tr>
                                     {this.state.allv}
                                 </tbody>
