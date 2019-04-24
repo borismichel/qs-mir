@@ -8,6 +8,7 @@ export class SavedItemsTable extends Component {
 
         this.state = {
             items: [],
+            openEls: [],
             baseUrl: '',
             update: true,
             apps: []
@@ -17,9 +18,10 @@ export class SavedItemsTable extends Component {
         uri += '//' + window.location.hostname;
         uri += (window.location.port.length > 0) ? (':' + window.location.port):'';
 
-        this.setState({baseUrl: uri});
+        this.state.baseUrl= uri;
 
         this.updateList = this.updateList.bind(this);
+        this.pushOpenItem = this.pushOpenItem.bind(this);
     }
 
     componentWillReceiveProps(newProps) {   
@@ -44,9 +46,7 @@ export class SavedItemsTable extends Component {
             })
         })
         .then((options) => {
-            this.setState({
-                apps: options
-            })
+            this.state.apps= options;
             this.updateList();
         })
     }
@@ -59,7 +59,6 @@ export class SavedItemsTable extends Component {
             return response.json();
         })
         .then((response) => {
-            console.log(response)
             let savedItems = response.map((item, idx) => {
                 return (
                         <ExportLineItem 
@@ -78,6 +77,8 @@ export class SavedItemsTable extends Component {
                             update=     {this.updateList}
                             apps=       {this.state.apps}
                             line=       {idx}
+                            open=       {(this.state.openEls.indexOf(item.app + '/' + item.objectid) > -1) ? true:false}
+                            pushOpenItem= {this.pushOpenItem}
                         />
                 )
             })
@@ -85,6 +86,10 @@ export class SavedItemsTable extends Component {
         });
     }
     
+    pushOpenItem (el) { //tracks open collapses ... yea, great phrasing
+        (this.state.openEls.indexOf(el) > -1) ? this.state.openEls.splice(this.state.openEls.indexOf(el), 1): this.state.openEls.push(el);
+    }
+
     render(){
         return (
             <div className="panel panel-default">
@@ -120,7 +125,7 @@ export class AppSelector extends Component {
         uri += '//' + window.location.hostname;
         uri += (window.location.port.length > 0) ? (':' + window.location.port):'';
 
-        this.setState({baseUrl: uri});
+        this.state.baseUrl= uri;
 
     }
 
@@ -175,7 +180,7 @@ export class AppSelector extends Component {
                         className={this.setBtnClass("btn btn-info")}
                         type="button"
                         title="Export to App"
-                        onClick={(this.props.edit) ? '': () => {this.handleSend(this.state.id, 'export', this.state.object)}}
+                        onClick={(this.props.edit) ? null: () => {this.handleSend(this.state.id, 'export', this.state.object)}}
                     >
                         <i className="fas fa-upload" />
                     </button>

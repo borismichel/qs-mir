@@ -21,11 +21,9 @@ export class Container extends React.Component {
 
         fetch(uri + '/api/qlikalive')
         .then((r) => {
-            console.log(r)
             return r.json()
         })
         .then((r) => {
-            console.log(r)
             if (r.status=='Success') {
                 this.setState({qlikAlive: true})
             }

@@ -29,8 +29,6 @@ export class ImportLineItem extends Component {
     handleSend(object) {
         let sendUrl = this.state.baseUrl + '/api/storeobject'
 
-        console.log('Sending', object)
-
         fetch(sendUrl, {
             method: 'post',
             headers: {

@@ -30,12 +30,15 @@ option {
     font-size: 12px;
 }
 
+td.id, th.id {
+    width: 5%;
+}
 td.name, th.name {
     width: 10%;
 }
 
 td.description, th.description {
-    width: 15%;
+    width: 30%;
 }
 
 td.type, th.type {

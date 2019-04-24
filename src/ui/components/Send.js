@@ -4,7 +4,6 @@ import { ImportLineItem } from "./ImportLineItem";
 export class ItemTable extends Component {
     constructor(props) {
         super(props);
-        console.log(this.props);
 
         this.state = {
             measures: [],
@@ -18,7 +17,7 @@ export class ItemTable extends Component {
         uri += '//' + window.location.hostname;
         uri += (window.location.port.length > 0) ? (':' + window.location.port):'';
 
-        this.setState({baseUrl: uri});
+        this.state.baseUrl= uri;
 
         this.updateList = this.updateList.bind(this);
     }
@@ -187,7 +186,6 @@ export class AppLoader extends Component {
     }
 
     handleChange(event){
-        console.log('event', event.target)
         this.setState({
             selected_app: event.target.value.split('#####' )[0],            
             selected_name: event.target.value.split('#####' )[1],
@@ -203,7 +201,6 @@ export class AppLoader extends Component {
     }
 
     render() {
-        console.log(this.state);
         return(
             <div className="panel panel-default">
                 <div className="panel-heading">Select an App to View Master Items</div>    
