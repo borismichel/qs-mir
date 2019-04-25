@@ -41,6 +41,7 @@ export class ExportLineItem extends Component {
         let versionList = this.state.allv.map((obj, idx) => {
             return(
                 <ExportSubLine
+                    key={obj.id}
                     version= {obj.version}
                     name= {obj.name}
                     label= {obj.label}
@@ -93,7 +94,7 @@ export class ExportLineItem extends Component {
                 <div className="panel-heading">
                     <table><tbody><tr>
                         <td className="name">
-                            <a href={"#item" + this.state.line} onClick={this.handleOpenToggle}>
+                            <a href={"#"} onClick={this.handleOpenToggle}>
                                 <b>
                                         {this.state.name}
                                 </b>

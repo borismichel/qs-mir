@@ -1,5 +1,3 @@
-import { qsPullMasterItems } from '../qs/qs';
-
 const sqlite3        = require('sqlite3').verbose();
 
 const qs = require('../qs/qs');
