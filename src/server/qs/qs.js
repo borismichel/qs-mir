@@ -56,7 +56,7 @@ export async function qsQlikAlive() {
         return {status: 'Success'}
     } catch(err) {
         console.error(err);
-        return {status: 'Failed'}
+        return {status: err.message}
     }
 }
 

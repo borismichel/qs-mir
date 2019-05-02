@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import {AppSelector} from './View'
 import Modal from 'react-modal';
-import { generateKeyPair } from "crypto";
 
 //Modal Settings for Editing Master Items
 
@@ -147,17 +146,17 @@ export class ExportSubLine extends Component {
                         </tr>
                         <tr>
                             <td style={{textAlign: 'right'}}><b>Description</b></td>
-                            <td><textarea className="form-control" cols="50" rows="5" >{this.state.description}</textarea></td>
+                            <td><textarea className="form-control" cols="50" rows="5"  value={this.state.description} /></td>
                         </tr>
                         <tr>
                             <td style={{textAlign: 'right'}}><b>Definition</b></td>
-                            <td><code><textarea className="form-control" cols="50" rows="15" >{this.state.definition}</textarea></code></td>
+                            <td><code><textarea className="form-control" cols="50" rows="15" value={this.state.definition} /></code></td>
                         </tr>
                         </tbody></table>   
                         
-                        <button className="btn btn-success" onClick={() => this.setState({modal: false})}><i class="fas fa-check"></i> Save</button> 
+                        <button className="btn btn-success" onClick={() => this.setState({modal: false})}><i className="fas fa-check"></i> Save</button> 
                         <span>     </span>                                            
-                        <button className="btn btn-danger" onClick={() => this.setState({modal: false})}><i class="fas fa-times"></i> Discard</button>
+                        <button className="btn btn-danger" onClick={() => this.setState({modal: false})}><i className="fas fa-times"></i> Discard</button>
                     </div>
                 </Modal>
             </tr>

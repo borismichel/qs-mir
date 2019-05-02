@@ -8,7 +8,8 @@ export class Container extends React.Component {
         super(props);
         this.state = {
             showView: false,
-            qlikAlive: false
+            qlikAlive: false,
+            errMsg: ''
         }
 
         this.toggleView = this.toggleView.bind(this);        
@@ -26,6 +27,8 @@ export class Container extends React.Component {
         .then((r) => {
             if (r.status=='Success') {
                 this.setState({qlikAlive: true})
+            } else {
+                this.setState({errMsg: r.status})
             }
         })
     }
@@ -56,11 +59,13 @@ export class Container extends React.Component {
             )
         } else {
             return (
-                <div className="container-fluid" style={{width: "33%"}}>
+                <div className="container">
                     <div className="panel panel-danger">
                         <div className="panel-heading">No Qlik Session Found!</div>
                         <div className="panel-body text-center">
-                            Make Sure your Qlik Sense is running or check the config file of QS MIR
+                            Make Sure your Qlik Sense is running or check the config file of QS MIR <br />
+                            <br />
+                            <code style={{fontSize: 16}}>{this.state.errMsg}</code>
                         </div>     
                     </div>     
                 </div>

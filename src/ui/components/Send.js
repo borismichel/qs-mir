@@ -1,5 +1,22 @@
 import React, { Component } from "react";
 import { ImportLineItem } from "./ImportLineItem";
+import Modal from "react-modal";
+
+const modalOverlayStyle = {
+    zIndex: 9999,
+    background: 'rgba(0, 0, 0, 0.75)'
+}
+
+const modalContentStyle = {
+    top                   : '50%',
+    left                  : '50%',
+    right                 : 'auto',
+    bottom                : 'auto',
+    marginRight           : '-50%',
+    transform             : 'translate(-50%, -50%)'
+}
+
+Modal.setAppElement('#root');
 
 export class ItemTable extends Component {
     constructor(props) {
@@ -10,7 +27,8 @@ export class ItemTable extends Component {
             dimensions: [],
             app: '',
             app_name: '',
-            baseUrl: ''
+            baseUrl: '',
+            load_modal: false
         }
         
         let uri = window.location.protocol;
@@ -48,7 +66,7 @@ export class ItemTable extends Component {
     updateList() {
         if (this.state.app =='') {return};
         let uri = this.state.baseUrl + '/api/qsmasterpull';
-
+        this.setState({load_modal: true});
         fetch(uri, {
             method: 'POST',
             headers: {
@@ -99,7 +117,8 @@ export class ItemTable extends Component {
             })
             this.setState({
                 measures: msrArray,
-                dimensions: dimArray
+                dimensions: dimArray,
+                load_modal: false
             })
         })
     }
@@ -135,6 +154,12 @@ export class ItemTable extends Component {
                         {this.state.dimensions}
                     </tbody>
                 </table>
+                <Modal 
+                    isOpen={this.state.load_modal}
+                    style={{overlay: modalOverlayStyle, content: modalContentStyle}}
+                >
+                <h1>Loading...</h1>
+                </Modal>
             </div>  
         )
     }
