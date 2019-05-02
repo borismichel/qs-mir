@@ -70,9 +70,9 @@ export class ExportSubLine extends Component {
             },
             body: JSON.stringify(body)
         }).then(() => {
+            this.props.update();
             this.setState({update: !this.state.update});
             this.modal && this.setState({modal: false}); //Close Modal if send came from inside Modal
-            this.props.update();
         })
     }
 
