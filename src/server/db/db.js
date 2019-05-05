@@ -81,7 +81,7 @@ export async function getLatestStoredItems() {
 export async function mapStoredObjects() {
     let currentItems = await getLatestStoredItems();
     let mappedItems = currentItems.map((item, idx) => {
-        let sql = 'SELECT id, version, name, label, description, definition FROM items \
+        let sql = 'SELECT id, version, name, label, description, definition, object FROM items \
             WHERE app="' + item.app + '" AND objectid="' + item.objectid + '" ORDER BY version DESC;';
         return new Promise((resolve, reject) => {
             db.all(sql, (err, rows) => {

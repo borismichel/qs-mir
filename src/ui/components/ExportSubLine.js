@@ -36,12 +36,22 @@ export class ExportSubLine extends Component {
             description: this.props.description,
             object: this.props.object,
 
+            newName: this.props.name,
+            newLabel: this.props.label,
+            newDefinition: this.props.definition,
+            newDescription: this.props.description,
+
             update: false,
             modal: false
         }
 
         this.handleSend = this.handleSend.bind(this);
         this.toggleEdit = this.toggleEdit.bind(this);
+        this.handleChangeDefinition = this.handleChangeDefinition.bind(this);
+        this.handleChangeDescription = this.handleChangeDescription.bind(this);
+        this.handleChangeLabel = this.handleChangeLabel.bind(this);
+        this.handleChangeName = this.handleChangeName.bind(this);
+        this.commitChange = this.commitChange.bind(this);
         
         let uri = window.location.protocol;
         uri += '//' + window.location.hostname;
@@ -78,6 +88,77 @@ export class ExportSubLine extends Component {
 
     toggleEdit() {
         this.setState({modal: !this.state.modal})
+    }
+
+    handleChangeName(e) {
+        this.setState({
+            newName: e.target.value
+        })
+    }
+
+    handleChangeLabel(e) {
+        this.setState({
+            newLabel: e.target.value
+        })
+    }
+
+    handleChangeDescription(e) {
+        this.setState({
+            newDescription: e.target.value
+        })
+    }
+
+    handleChangeDefinition(e) {
+        this.setState({
+            newDefinition: e.target.value
+        })
+    }
+
+    commitChange() {
+        // commit new values to current component
+
+        this.setState({
+            name: this.state.newName,
+            label: this.state.newLabel,
+            definition: this.state.newDefinition,
+            description: this.state.newDescription,
+            modal: false
+        })
+
+        // Update Object
+        
+        let tmpObj = JSON.parse(this.state.object);
+
+        tmpObj.qMeasure.qDef = this.state.newDefinition;
+        tmpObj.qMeasure.qLabel = this.state.newLabel;
+        tmpObj.qMeta.title = this.state.newTitle
+        tmpObj.qMeta.description = this.state.newDescription + '\n\n\n modified by QS MIR';
+
+        this.state.object = JSON.stringify(tmpObj);
+
+        // Update in Database
+
+        let sendUrl = this.state.baseUrl + '/api/updateobject'
+
+        let body = {
+            id: this.state.id,
+            name: this.state.newName,
+            label: this.state.newName,
+            definition: this.state.newDefinition,
+            description: this.state.newDescription,
+            object: this.state.object
+        }
+
+        fetch(sendUrl, {
+            method: 'post',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(body)
+        }).then(() => {
+            this.props.update();
+        })
+
     }
 
     render(){
@@ -138,23 +219,23 @@ export class ExportSubLine extends Component {
                         <table className="table"><tbody>
                         <tr>
                             <td style={{textAlign: 'right'}}><b>Name</b></td>
-                            <td><input className="form-control" value={this.state.name} /></td>
+                            <td><input className="form-control" value={this.state.newName} onChange={this.handleChangeName} /></td>
                         </tr>
                         <tr>
                             <td style={{textAlign: 'right'}}><b>Label</b></td>
-                            <td><input className="form-control" value={this.state.label} /></td>
+                            <td><input className="form-control" value={this.state.newLabel} onChange={this.handleChangeLabel} /></td>
                         </tr>
                         <tr>
                             <td style={{textAlign: 'right'}}><b>Description</b></td>
-                            <td><textarea className="form-control" cols="50" rows="5"  value={this.state.description} /></td>
+                            <td><textarea className="form-control" cols="50" rows="5"  value={this.state.newDescription} onChange={this.handleChangeDescription} /></td>
                         </tr>
                         <tr>
                             <td style={{textAlign: 'right'}}><b>Definition</b></td>
-                            <td><code><textarea className="form-control" cols="50" rows="15" value={this.state.definition} /></code></td>
+                            <td><code><textarea className="form-control" cols="50" rows="15" value={this.state.newDefinition} onChange={this.handleChangeDefinition} /></code></td>
                         </tr>
                         </tbody></table>   
                         
-                        <button className="btn btn-success" onClick={() => this.setState({modal: false})}><i className="fas fa-check"></i> Save</button> 
+                        <button className="btn btn-success" onClick={this.commitChange}><i className="fas fa-check"></i> Save</button> 
                         <span>     </span>                                            
                         <button className="btn btn-danger" onClick={() => this.setState({modal: false})}><i className="fas fa-times"></i> Discard</button>
                     </div>
