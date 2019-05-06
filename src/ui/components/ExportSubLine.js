@@ -62,7 +62,14 @@ export class ExportSubLine extends Component {
     }
 
     componentWillReceiveProps(newProps) {
-
+        this.setState({            
+            version: newProps.version,
+            name: newProps.name,
+            label: newProps.label,
+            definition: newProps.definition,
+            description: newProps.description,
+            object: newProps.object
+        })
     }
 
     shouldComponentUpdate(){
@@ -140,8 +147,8 @@ export class ExportSubLine extends Component {
             tmpObj.qDim.qFieldDefs[0] = this.state.newDefinition;
             tmpObj.qDim.qFieldLabels[0] = this.state.newLabel;
         }
-        tmpObj.qMeta.title = this.state.newTitle
-        tmpObj.qMeta.description = this.state.newDescription + '\n\n\n modified by QS MIR';
+        tmpObj.qMeta.title = this.state.newName;
+        tmpObj.qMeta.description = this.state.newDescription + '\n\n\n modified by QS MIR (exported v' + this.state.version + ')';
 
         this.state.object = JSON.stringify(tmpObj);
 
@@ -152,7 +159,7 @@ export class ExportSubLine extends Component {
         let body = {
             id: this.state.id,
             name: this.state.newName,
-            label: this.state.newName,
+            label: this.state.newLabel,
             definition: this.state.newDefinition,
             description: this.state.newDescription,
             object: this.state.object

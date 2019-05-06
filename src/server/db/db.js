@@ -34,7 +34,11 @@ export async function editMasterItem(id, method, object, app) {
         break;
 
         case 'export':
-        res = await qs.qsDeployMasterItem(app, layout);
+        if(app&&layout){
+            res = await qs.qsDeployMasterItem(app, layout);
+        } else {
+            res = 'Invalid App &| Layout'
+        }
         break;
     }
 

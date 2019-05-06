@@ -115,7 +115,7 @@ export class AppSelector extends Component {
         this.state = {
             app: '',
             apps: this.props.apps,
-            value: 'App',
+            value: '<App>',
             id: this.props.id,
             object: this.props.object, 
             baseUrl : ''
@@ -133,6 +133,12 @@ export class AppSelector extends Component {
     }
 
     componentWillMount() {        
+    }
+
+    componentWillReceiveProps(newProps){
+        this.setState({
+            object: newProps.object
+        })
     }
 
     shouldComponentUpdate() {
@@ -175,7 +181,7 @@ export class AppSelector extends Component {
                     value={this.state.value} 
                     onChange={this.handleChange}
                     >
-                        <option value=''>App</option>
+                        <option selected disabled>&lt;App&gt;</option>
                         {this.state.apps}
                 </select>
                 <span className="input-group-btn">

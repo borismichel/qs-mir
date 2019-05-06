@@ -20,7 +20,7 @@ process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = 0; //Self Signed Cert by QS prob
 // session.on('traffic:received', data => console.log('received:', data));
 
 
-export async function buildProps(isSrv) {
+export async function buildProps(isSrv, user) {
     console.log('is server:', isSrv)
     if (isSrv) {
         return {
@@ -31,7 +31,7 @@ export async function buildProps(isSrv) {
                 key: key, //< Uncomment when on Server
                 cert: client, //< Uncomment when on Server
                 headers: {
-                    'X-Qlik-User': config.qlikUser
+                    'X-Qlik-User': (user) ? user:config.qlikUser //Use user if set use api user if not
                 },
             })
         }
@@ -188,24 +188,11 @@ export async function qsGetDocList() {
 export async function qsDeployMasterItem(appid, object) {
     try {
 
-        const session = enigma.create({
-            schema,
-            url: config.qlikServer,
-            createSocket: url => new webSocket(url,{
-                ca: root, //< Uncomment when on Server
-                key: key, //< Uncomment when on Server
-                cert: client, //< Uncomment when on Server
-                headers: {
-                    'X-Qlik-User': config.qlikUser
-                },
-            })
-        });
+        const session = enigma.create(await buildProps(config.qlikIsSrv));
         const global = await session.open();
         const app = await global.openDoc(appid);
 
         var result;
-
-        
 
         if(object.qInfo.qType=="measure") {
             let options = {
