@@ -82,7 +82,10 @@ export class SavedItemsTable extends Component {
                         />
                 )
             })
-            this.setState({items: savedItems});
+            this.setState({
+                items: savedItems,
+                update: !this.state.update
+            });
         });
     }
     

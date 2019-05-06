@@ -22,12 +22,15 @@ export class ExportLineItem extends Component {
             allv: this.props.allversions,
             open: this.props.open,
 
+            sublines: null,
             update: false,
 
             baseUrl: ''
         }
         this.handleSend = this.handleSend.bind(this);
         this.handleOpenToggle = this.handleOpenToggle.bind(this);
+        this.updateList = this.updateList.bind(this);
+        this.buildSubLines = this.buildSubLines.bind(this);
 
         let uri = window.location.protocol;
         uri += '//' + window.location.hostname;
@@ -38,7 +41,37 @@ export class ExportLineItem extends Component {
 
     componentWillMount() {
         //Populate list
-        let versionList = this.state.allv.map((obj, idx) => {
+        this.buildSubLines(this.props.allversions);
+    }
+    
+    componentWillReceiveProps(newProps) {
+        this.buildSubLines(newProps.allversions)
+        this.setState({
+            id: newProps.line_id,
+            name: newProps.name,
+            type: newProps.type,
+            app: newProps.app,
+            appname: newProps.appname,
+            objectid: newProps.objectid,
+            definition: newProps.definition,
+            description: newProps.description,
+            object: newProps.object,
+            line: newProps.line,
+            version: newProps.version,
+            allv: newProps.allversions
+        })
+    }
+
+    shouldComponentUpdate(){
+        return true;
+    }
+
+    updateList() {
+        this.props.update();
+    }
+
+    buildSubLines(list) {
+        let versionList =list.map((obj, idx) => {
             return(
                 <ExportSubLine
                     key={obj.id}
@@ -48,18 +81,15 @@ export class ExportLineItem extends Component {
                     definition= {obj.definition}
                     description= {obj.description}
                     object= {obj.object}
-                    id= {obj.id}                    
+                    id= {obj.id}                
+                    type={obj.type}    
                     apps={this.props.apps}
 
-                    update={this.props.update}
+                    update={this.updateList}
                 />
             )
         })
-        this.state.allv = versionList;
-    }
-    
-    shouldComponentUpdate(){
-        return true;
+        this.state.sublines = versionList;
     }
 
     handleSend(id, method, object) {
@@ -139,7 +169,7 @@ export class ExportLineItem extends Component {
                                         <th>Delete</th>
                                         <th>Export</th>
                                     </tr>
-                                    {this.state.allv}
+                                    {this.state.sublines}
                                 </tbody>
                             </table>
                         </div>

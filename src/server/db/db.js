@@ -81,7 +81,7 @@ export async function getLatestStoredItems() {
 export async function mapStoredObjects() {
     let currentItems = await getLatestStoredItems();
     let mappedItems = currentItems.map((item, idx) => {
-        let sql = 'SELECT id, version, name, label, description, definition, object FROM items \
+        let sql = 'SELECT id, type, version, name, label, description, definition, object FROM items \
             WHERE app="' + item.app + '" AND objectid="' + item.objectid + '" ORDER BY version DESC;';
         return new Promise((resolve, reject) => {
             db.all(sql, (err, rows) => {
@@ -105,4 +105,10 @@ export async function getMaxVersionForItem(app, object) {
             }
         })
     })
+}
+
+export async function modifyMasterItem(id, name, label, description, definition, object) {
+    let sql = `UPDATE items SET name =?, label=?, description =?, definition=?, object=? WHERE id=?`
+
+    db.run(sql, name, label, description, definition, object, id)
 }

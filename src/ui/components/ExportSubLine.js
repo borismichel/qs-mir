@@ -35,6 +35,7 @@ export class ExportSubLine extends Component {
             definition: this.props.definition,
             description: this.props.description,
             object: this.props.object,
+            type: this.props.type,
 
             newName: this.props.name,
             newLabel: this.props.label,
@@ -60,6 +61,10 @@ export class ExportSubLine extends Component {
         this.state.baseUrl= uri
     }
 
+    componentWillReceiveProps(newProps) {
+
+    }
+
     shouldComponentUpdate(){
         return true;
     }
@@ -81,7 +86,7 @@ export class ExportSubLine extends Component {
             body: JSON.stringify(body)
         }).then(() => {
             this.props.update();
-            this.setState({update: !this.state.update});
+            // this.setState({update: !this.state.update});
             this.modal && this.setState({modal: false}); //Close Modal if send came from inside Modal
         })
     }
@@ -128,9 +133,13 @@ export class ExportSubLine extends Component {
         // Update Object
         
         let tmpObj = JSON.parse(this.state.object);
-
-        tmpObj.qMeasure.qDef = this.state.newDefinition;
-        tmpObj.qMeasure.qLabel = this.state.newLabel;
+        if (this.state.type === 'measure') {
+            tmpObj.qMeasure.qDef = this.state.newDefinition;
+            tmpObj.qMeasure.qLabel = this.state.newLabel;
+        } else {
+            tmpObj.qDim.qFieldDefs[0] = this.state.newDefinition;
+            tmpObj.qDim.qFieldLabels[0] = this.state.newLabel;
+        }
         tmpObj.qMeta.title = this.state.newTitle
         tmpObj.qMeta.description = this.state.newDescription + '\n\n\n modified by QS MIR';
 
@@ -157,6 +166,7 @@ export class ExportSubLine extends Component {
             body: JSON.stringify(body)
         }).then(() => {
             this.props.update();
+            // this.setState({update: !this.state.update})s
         })
 
     }
