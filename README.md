@@ -25,8 +25,11 @@ To install QS MIR do the following:
 
 1) Clone or Download this repository and unzip to a folder on your PC / Server
 
-2) Open a command prompt and navigate to the folder you created in 1). Here, run ```npm install```
+2) Open a command prompt and navigate to the project's folder you created in 1). Here, run ```npm install```
 
 3) If you're running this with Qlik Sense Desktop, skip to step _X_. For Server continue with step _4_
 
-4) 
+4) To enable the backend to communicate with Qlik we need to export certificates through yor QMC (or via API) see [HERE](https://help.qlik.com/en-US/sense/April2019/Subsystems/ManagementConsole/Content/Sense_QMC/export-certificates.htm) to find out how. 
+
+5) Copy the certificates to the following path in your project folder ```<Your project folder>/src/server/cert```
+
