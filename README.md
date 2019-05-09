@@ -75,3 +75,10 @@ Manage and export master items from the repository view
 ## Call for Support
 
 If you're interested in contributing or collaborating on the project let me know. There are tons of ideas and possibilities and since I'm doing this in my free time I cannot possibly realise all of them :-)
+
+## Ideas
+
+* Add a management/settings view to handle connection and other properties
+* Choose which user to export the ite for on server (get app owner via QRS)
+* Validate expression syntax by choosing an app to validate in and then use API method. Could also validate before export to see if fields are available that are used
+* Replace original master item when exporting and object is present - this should update all dependent objects (thanks [@dietler](https://twitter.com/dietler))
