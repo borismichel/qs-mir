@@ -4,10 +4,13 @@ const path = require('path');
 
 // Custom Packages
 
+const config = require('./config/config');
 const qs = require('./qs/qs');
 const db = require('./db/db');
 
 const app = express();
+
+const port = process.env.PORT || config.port;
 
 app.use(bodyparser.json());
 app.use(express.static(path.join(__dirname, '../../dist/')));
@@ -102,5 +105,5 @@ app.post('/submit', (req, res) => {
     console.log(JSON.stringify(req.body, null, 2));
 })
 
-app.listen(1212);
-console.log('Server listening on port 1212')
+app.listen(port);
+console.log('Server listening on port ' + port);
