@@ -81,4 +81,4 @@ If you're interested in contributing or collaborating on the project let me know
 * Add a management/settings view to handle connection and other properties
 * Choose which user to export the ite for on server (get app owner via QRS)
 * Validate expression syntax by choosing an app to validate in and then use API method. Could also validate before export to see if fields are available that are used
-* Replace original master item when exporting and object is present - this should update all dependent objects (thanks [@dietler](https://twitter.com/dietler))
+* Replace original master item when exporting and object is present - this should update all dependent objects (thanks [@dietler](https://twitter.com/dietler)) - This should be done via ApplyPatches() method
