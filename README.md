@@ -33,7 +33,7 @@ To install QS MIR do the following:
 
 5) Copy the certificates to the following path in your project folder ```<Your project folder>/src/server/cert``` if it doesnt exist yet, create the subfolder.
 
-6) Modify the config file stored in ```<Your project folder>/src/server/config/config.js```. (I wnat to have an admin layer in the future but this is it for now ;-))
+6) Modify the config file stored in ```<Your project folder>/src/server/config/config.js```. (I want to have an admin layer in the future but this is it for now ;-))
 
 ```javascript
 ///src/server/config/config.js
@@ -46,7 +46,7 @@ export var port = 1212; // Change this port if you don't like mine
 
 export var qlikCertificateDir = './src/server/cert/'; //change this if you want to take your certificates from elsewhere
 export var qlikUser     = 'UserDirectory=INTERNAL;UserId=SA_API'; //Change this if you want to use another user then the standard API service account
-export var qlikServer   = null; // Here enter the websocket address for your Qlik Sense Server engine
+export var qlikServer   = null; // Here enter the websocket address for your Qlik Sense Server engine (default: wss://your.qlik.sense:4747/app/engineData)
 export var qlikIsSrv    = false; //change this to true if you're connecting to a QS server
 ```
 
