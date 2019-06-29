@@ -40,7 +40,7 @@ To install QS MIR do the following:
 
 // Webserver Config 
 
-export var port = 1212; // Change this port if you don't like mine
+export var port = 1212; // Change this port if you wish
 
 // Qlik Sense Stuff
 
