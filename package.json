@@ -8,8 +8,7 @@
     "server": "nodemon --exec npx babel-node ./src/server/app.js",
     "ui": "webpack-dev-server --mode development --open --hot",
     "ui_build": "webpack --mode production",
-    "ui_dev": "webpack --mode development --watch",
-    "start": "concurrently \"npm run server\" \"npm run ui\""
+    "ui_dev": "webpack --mode development --watch"
   },
   "keywords": [],
   "author": "Boris Michel",
